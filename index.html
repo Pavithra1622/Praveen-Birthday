@@ -1,45 +1,539 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Happy Birthday</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday — Praveen</title>
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Lora:ital,wght@0,400;0,600;1,400&family=Sacramento&display=swap" rel="stylesheet">
+
 <style>
-body{
-font-family: Arial;
-text-align:center;
-background:linear-gradient(120deg,#ff9a9e,#fad0c4);
-color:white;
-padding-top:100px;
+:root {
+  --gold:   #F5C842;
+  --rose:   #F4637A;
+  --peach:  #FFB49A;
+  --cream:  #FFF8F0;
+  --dark:   #1C0A14;
 }
 
-h1{
-font-size:50px;
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--dark);
+  font-family: 'Lora', serif;
+  color: var(--cream);
+  overflow-x: hidden;
+  cursor: none;
 }
 
-button{
-padding:15px 30px;
-font-size:20px;
-border:none;
-border-radius:10px;
-cursor:pointer;
-background:white;
-color:#ff4b6e;
+/* ─── CURSOR ─── */
+.cur {
+  width:16px; height:16px;
+  border:2px solid var(--gold);
+  border-radius:50%;
+  position:fixed;
+  pointer-events:none;
+  z-index:9999;
+  transform:translate(-50%,-50%);
+  transition:transform .15s, background .2s;
 }
+.cur-dot {
+  width:5px; height:5px;
+  background:var(--gold);
+  border-radius:50%;
+  position:fixed;
+  pointer-events:none;
+  z-index:9999;
+  transform:translate(-50%,-50%);
+}
+
+/* ─── CANVAS BG ─── */
+#bg { position:fixed; inset:0; z-index:0; }
+
+/* ─── PAGE ─── */
+.page { position:relative; z-index:2; min-height:100vh; }
+
+/* ─── HERO ─── */
+.hero {
+  min-height:100vh;
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  align-items:center;
+  gap:0;
+  padding:60px;
+  position:relative;
+}
+
+@media(max-width:800px){
+  .hero { grid-template-columns:1fr; padding:40px 24px; text-align:center; }
+  .photo-side { order:-1; }
+}
+
+/* ─── LEFT TEXT ─── */
+.text-side {
+  display:flex;
+  flex-direction:column;
+  gap:28px;
+  opacity:0;
+  animation:slideLeft .9s .4s forwards;
+}
+
+@keyframes slideLeft {
+  from { opacity:0; transform:translateX(-40px); }
+  to   { opacity:1; transform:translateX(0); }
+}
+
+.kicker {
+  font-family:'Sacramento', cursive;
+  font-size:34px;
+  color:var(--peach);
+  line-height:1;
+  letter-spacing:1px;
+}
+
+.hero-title {
+  font-family:'Abril Fatface', serif;
+  font-size:clamp(52px, 8vw, 96px);
+  line-height:.95;
+  color:var(--cream);
+  position:relative;
+}
+
+.hero-title .highlight {
+  display:block;
+  background:linear-gradient(100deg, var(--gold) 0%, var(--rose) 60%, var(--peach) 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  filter:drop-shadow(0 0 30px rgba(245,200,66,.3));
+}
+
+.age-tag {
+  display:inline-block;
+  background:linear-gradient(135deg, var(--gold), var(--rose));
+  color:var(--dark);
+  font-family:'Abril Fatface', serif;
+  font-size:20px;
+  padding:6px 20px;
+  border-radius:50px;
+  letter-spacing:2px;
+}
+
+.quote-stack {
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.qline {
+  font-style:italic;
+  font-size:16px;
+  color:rgba(255,248,240,.65);
+  padding-left:16px;
+  border-left:2px solid var(--rose);
+  line-height:1.6;
+  opacity:0;
+  animation:fadeUp .7s forwards;
+}
+.qline:nth-child(1){ animation-delay:.8s; }
+.qline:nth-child(2){ animation-delay:1.0s; }
+.qline:nth-child(3){ animation-delay:1.2s; }
+
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(12px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+/* ─── CTA BUTTON ─── */
+.cta-wrap {
+  opacity:0;
+  animation:fadeUp .7s 1.5s forwards;
+}
+
+.cta {
+  display:inline-flex;
+  align-items:center;
+  gap:12px;
+  background:linear-gradient(135deg, var(--gold), var(--rose));
+  color:var(--dark);
+  font-family:'Abril Fatface', serif;
+  font-size:20px;
+  padding:16px 38px;
+  border-radius:60px;
+  text-decoration:none;
+  border:none;
+  cursor:none;
+  transition:transform .3s, box-shadow .3s;
+  box-shadow:0 8px 30px rgba(244,99,122,.4);
+  position:relative;
+  overflow:hidden;
+}
+
+.cta::before {
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.25),transparent);
+  opacity:0;
+  transition:opacity .3s;
+}
+
+.cta:hover { transform:scale(1.06) translateY(-3px); box-shadow:0 16px 50px rgba(244,99,122,.6); }
+.cta:hover::before { opacity:1; }
+
+.cta-icon {
+  font-size:24px;
+  animation:spin 3s linear infinite;
+}
+@keyframes spin { to { transform:rotate(360deg); } }
+
+/* ─── PHOTO SIDE ─── */
+.photo-side {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+  opacity:0;
+  animation:slideRight .9s .5s forwards;
+}
+
+@keyframes slideRight {
+  from { opacity:0; transform:translateX(40px); }
+  to   { opacity:1; transform:translateX(0); }
+}
+
+.photo-frame {
+  position:relative;
+  width:360px;
+  height:420px;
+}
+
+/* Glow rings */
+.photo-frame::before, .photo-frame::after {
+  content:'';
+  position:absolute;
+  border-radius:50%;
+  animation:pulseRing 3s ease-in-out infinite;
+}
+.photo-frame::before {
+  inset:-20px;
+  border:2px solid rgba(245,200,66,.25);
+  border-radius:200px;
+}
+.photo-frame::after {
+  inset:-40px;
+  border:1px solid rgba(244,99,122,.15);
+  border-radius:220px;
+  animation-delay:.5s;
+}
+
+@keyframes pulseRing {
+  0%,100% { transform:scale(1);   opacity:.6; }
+  50%      { transform:scale(1.04); opacity:1; }
+}
+
+/* Photo blob */
+.photo-blob {
+  width:100%;
+  height:100%;
+  border-radius:60% 40% 55% 45% / 50% 55% 45% 50%;
+  overflow:hidden;
+  position:relative;
+  box-shadow:
+    0 0 0 4px rgba(245,200,66,.3),
+    0 20px 60px rgba(0,0,0,.6),
+    0 0 80px rgba(244,99,122,.2);
+  animation:morphBlob 8s ease-in-out infinite;
+}
+
+@keyframes morphBlob {
+  0%,100% { border-radius:60% 40% 55% 45% / 50% 55% 45% 50%; }
+  25%     { border-radius:50% 50% 45% 55% / 55% 45% 55% 45%; }
+  50%     { border-radius:45% 55% 60% 40% / 45% 55% 45% 55%; }
+  75%     { border-radius:55% 45% 50% 50% / 50% 50% 55% 45%; }
+}
+
+.photo-blob img {
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+/* Fallback if no photo */
+.photo-blob .no-photo {
+  width:100%;
+  height:100%;
+  background:linear-gradient(135deg, rgba(245,200,66,.15), rgba(244,99,122,.15));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  gap:12px;
+  color:rgba(255,248,240,.4);
+  font-size:14px;
+  letter-spacing:3px;
+}
+
+/* Name badge floating over photo */
+.name-badge {
+  position:absolute;
+  bottom:-20px;
+  left:50%;
+  transform:translateX(-50%);
+  background:linear-gradient(135deg, var(--gold), var(--rose));
+  color:var(--dark);
+  font-family:'Abril Fatface', serif;
+  font-size:22px;
+  padding:10px 34px;
+  border-radius:50px;
+  white-space:nowrap;
+  box-shadow:0 8px 30px rgba(244,99,122,.5);
+  letter-spacing:1px;
+  z-index:3;
+}
+
+/* Sparkles around photo */
+.sparkle {
+  position:absolute;
+  font-size:22px;
+  animation:floatSpark var(--d) var(--dl) ease-in-out infinite alternate;
+  filter:drop-shadow(0 0 6px rgba(245,200,66,.8));
+}
+@keyframes floatSpark {
+  from { transform:translate(0,0) rotate(0deg); }
+  to   { transform:translate(var(--tx),var(--ty)) rotate(20deg); }
+}
+
+/* Date strip */
+.date-strip {
+  position:absolute;
+  top:20px;
+  right:-10px;
+  background:rgba(255,255,255,.06);
+  backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:16px;
+  padding:12px 18px;
+  text-align:center;
+  line-height:1.4;
+  font-size:13px;
+  color:rgba(255,248,240,.6);
+  letter-spacing:2px;
+}
+.date-strip strong {
+  display:block;
+  font-family:'Abril Fatface', serif;
+  font-size:28px;
+  color:var(--gold);
+  letter-spacing:0;
+}
+
+/* ─── FLOATING EMOJIS ─── */
+.floaters { position:fixed; inset:0; pointer-events:none; z-index:1; }
+.fe {
+  position:absolute;
+  font-size:26px;
+  animation:riseUp var(--d) var(--dl) ease-in infinite;
+  opacity:0;
+}
+@keyframes riseUp {
+  0%   { opacity:0; transform:translateY(110vh) scale(.5) rotate(0deg); }
+  10%  { opacity:.8; }
+  90%  { opacity:.5; }
+  100% { opacity:0; transform:translateY(-150px) scale(1.1) rotate(360deg); }
+}
+
+/* ─── CONFETTI CANVAS ─── */
+#confetti { position:fixed; inset:0; z-index:1; pointer-events:none; }
+
 </style>
 </head>
-
 <body>
 
-<h1>🎉 Happy Birthday My Dear Brother 🎉</h1>
+<div class="cur" id="cur"></div>
+<div class="cur-dot" id="curDot"></div>
 
-<p>"A brother is a friend given by nature."</p>
-<p>"No matter what happens, you will always be my brother."</p>
-<p>"You are not just my brother, you are my best friend."</p>
+<canvas id="bg"></canvas>
+<canvas id="confetti"></canvas>
 
-<br>
+<div class="floaters" id="floaters"></div>
 
-<a href="surprise.html">
-<button>Click for Surprise 🎁</button>
-</a>
+<div class="page">
+  <section class="hero">
 
+    <!-- LEFT: Text -->
+    <div class="text-side">
+      <div class="kicker">A very special day for a very special person</div>
+
+      <h1 class="hero-title">
+        Happy<br>
+        <span class="highlight">Birthday</span>
+      </h1>
+
+      <div><span class="age-tag">✦ 25 Years ✦</span></div>
+
+      <div class="quote-stack">
+        <p class="qline">"A brother is a friend given by nature."</p>
+        <p class="qline">"No matter what happens, you will always be my brother."</p>
+        <p class="qline">"You are not just my brother — you are my best friend."</p>
+      </div>
+
+      <div class="cta-wrap">
+        <a class="cta" href="surprise.html">
+          <span class="cta-icon">🎁</span>
+          Open Your Surprise
+        </a>
+      </div>
+    </div>
+
+    <!-- RIGHT: Photo -->
+    <div class="photo-side">
+      <div class="photo-frame">
+
+        <!-- Floating sparkles -->
+        <span class="sparkle" style="top:-30px;left:10px;--d:3s;--dl:0s;--tx:-8px;--ty:-12px;">✨</span>
+        <span class="sparkle" style="top:-10px;right:0px;--d:4s;--dl:.5s;--tx:8px;--ty:-10px;">⭐</span>
+        <span class="sparkle" style="bottom:40px;left:-30px;--d:3.5s;--dl:1s;--tx:-10px;--ty:8px;">🌟</span>
+        <span class="sparkle" style="bottom:10px;right:-20px;--d:4.5s;--dl:.3s;--tx:10px;--ty:6px;">✦</span>
+        <span class="sparkle" style="top:50%;left:-35px;--d:3s;--dl:.7s;--tx:-6px;--ty:-8px;">💫</span>
+
+        <!-- Date badge -->
+        <div class="date-strip">
+          <strong>3</strong>
+          APR · 2001
+        </div>
+
+        <!-- Photo blob -->
+        <div class="photo-blob" id="photoBlob">
+          <img src="photo.jpg" alt="Praveen" onerror="this.parentElement.innerHTML='<div class=no-photo><span style=font-size:64px>🎂</span><span>PHOTO HERE</span></div>'">
+        </div>
+
+        <!-- Name badge -->
+        <div class="name-badge">Praveen ✦</div>
+      </div>
+    </div>
+
+  </section>
+</div>
+
+<script>
+/* ─── CURSOR ─── */
+const cur=document.getElementById('cur'), cdot=document.getElementById('curDot');
+document.addEventListener('mousemove',e=>{
+  cur.style.left=e.clientX+'px'; cur.style.top=e.clientY+'px';
+  cdot.style.left=e.clientX+'px'; cdot.style.top=e.clientY+'px';
+});
+document.querySelectorAll('a,button,.cta').forEach(el=>{
+  el.addEventListener('mouseenter',()=>cur.style.transform='translate(-50%,-50%) scale(2.2)');
+  el.addEventListener('mouseleave',()=>cur.style.transform='translate(-50%,-50%) scale(1)');
+});
+
+/* ─── ANIMATED BACKGROUND ─── */
+const bgC=document.getElementById('bg'), bgX=bgC.getContext('2d');
+function resizeBg(){ bgC.width=window.innerWidth; bgC.height=window.innerHeight; }
+resizeBg(); window.addEventListener('resize',resizeBg);
+
+const stars=Array.from({length:160},()=>({
+  x:Math.random(), y:Math.random(),
+  r:Math.random()*1.4+.3,
+  phase:Math.random()*Math.PI*2,
+  speed:Math.random()*.004+.002,
+  hue:['#F5C842','#F4637A','#FFB49A','#FFFFFF'][Math.floor(Math.random()*4)]
+}));
+
+let tick=0;
+function drawBg(){
+  const w=bgC.width,h=bgC.height; tick+=.01;
+  bgX.clearRect(0,0,w,h);
+  // bg gradient
+  const g=bgX.createRadialGradient(w*.25,h*.3,0,w*.5,h*.5,w*.9);
+  g.addColorStop(0,'#2d0920'); g.addColorStop(.5,'#150510'); g.addColorStop(1,'#080005');
+  bgX.fillStyle=g; bgX.fillRect(0,0,w,h);
+  // warm nebula left
+  const n1=bgX.createRadialGradient(0,h*.7,0,0,h*.7,w*.5);
+  n1.addColorStop(0,'rgba(244,99,122,0.08)'); n1.addColorStop(1,'transparent');
+  bgX.fillStyle=n1; bgX.fillRect(0,0,w,h);
+  // gold nebula right
+  const n2=bgX.createRadialGradient(w,h*.3,0,w,h*.3,w*.5);
+  n2.addColorStop(0,'rgba(245,200,66,0.07)'); n2.addColorStop(1,'transparent');
+  bgX.fillStyle=n2; bgX.fillRect(0,0,w,h);
+
+  // stars
+  stars.forEach(s=>{
+    s.phase+=s.speed;
+    const alpha=(Math.sin(s.phase)+1)/2*.9+.1;
+    bgX.globalAlpha=alpha;
+    bgX.beginPath();
+    bgX.arc(s.x*w, s.y*h, s.r, 0, Math.PI*2);
+    bgX.fillStyle=s.hue; bgX.fill();
+    bgX.globalAlpha=1;
+  });
+
+  requestAnimationFrame(drawBg);
+}
+drawBg();
+
+/* ─── CONFETTI ─── */
+const conC=document.getElementById('confetti'), conX=conC.getContext('2d');
+function resizeCon(){ conC.width=window.innerWidth; conC.height=window.innerHeight; }
+resizeCon(); window.addEventListener('resize',resizeCon);
+
+const COLS=['#F5C842','#F4637A','#FFB49A','#FFFFFF','#C084FC','#67E8F9'];
+const bits=[];
+
+function burst(x,y,n=70){
+  for(let i=0;i<n;i++){
+    const ang=Math.random()*Math.PI*2, spd=Math.random()*9+2;
+    bits.push({x,y,vx:Math.cos(ang)*spd,vy:Math.sin(ang)*spd-3,
+      r:Math.random()*5+2, c:COLS[Math.floor(Math.random()*COLS.length)],
+      rot:Math.random()*360, rs:(Math.random()-.5)*12, life:1,
+      rect:Math.random()<.5});
+  }
+}
+
+function drawConf(){
+  conX.clearRect(0,0,conC.width,conC.height);
+  for(let i=bits.length-1;i>=0;i--){
+    const b=bits[i];
+    b.x+=b.vx; b.y+=b.vy; b.vy+=.2;
+    b.rot+=b.rs; b.life-=.013;
+    if(b.life<=0||b.y>conC.height+50){bits.splice(i,1);continue;}
+    conX.save();
+    conX.globalAlpha=b.life;
+    conX.translate(b.x,b.y); conX.rotate(b.rot*Math.PI/180);
+    conX.fillStyle=b.c;
+    if(b.rect) conX.fillRect(-b.r,-b.r/2,b.r*2,b.r);
+    else{ conX.beginPath(); conX.arc(0,0,b.r/2,0,Math.PI*2); conX.fill(); }
+    conX.restore();
+  }
+  requestAnimationFrame(drawConf);
+}
+drawConf();
+
+// Auto burst on load
+setTimeout(()=>{
+  for(let i=0;i<4;i++) setTimeout(()=>burst(Math.random()*window.innerWidth,-10,60),i*400);
+}, 600);
+setInterval(()=>burst(Math.random()*window.innerWidth,-10,18), 3000);
+
+// Click sparks
+document.addEventListener('click',e=>{
+  if(e.target.tagName!=='A') burst(e.clientX,e.clientY,25);
+});
+
+/* ─── FLOATING EMOJIS ─── */
+const ems=['🎈','🎉','✨','🎊','🥳','💖','🌸','🦋','💐','🎂','⭐','🌟'];
+const ft=document.getElementById('floaters');
+ems.forEach(em=>{
+  const s=document.createElement('span');
+  s.className='fe'; s.textContent=em;
+  s.style.setProperty('--d',(9+Math.random()*5)+'s');
+  s.style.setProperty('--dl',(Math.random()*10)+'s');
+  s.style.left=(Math.random()*95)+'%';
+  ft.appendChild(s);
+});
+</script>
 </body>
 </html>
