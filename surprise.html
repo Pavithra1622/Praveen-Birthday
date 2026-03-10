@@ -1,389 +1,1058 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Birthday Surprise</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday Praveen 🎉</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Cormorant+Garamond:wght@300;400;600&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 
 <style>
-
-body{
-margin:0;
-font-family:'Segoe UI';
-background:url("nature.jpg") center/cover fixed;
-color:white;
-text-align:center;
+:root {
+  --gold: #FFD700;
+  --rose: #FF6B9D;
+  --violet: #C084FC;
+  --cyan: #67E8F9;
+  --warm: #FFF7ED;
 }
 
-/* overlay */
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-.overlay{
-background:rgba(0,0,0,0.55);
-min-height:100vh;
-padding:40px;
+body {
+  background: #0a0010;
+  color: white;
+  font-family: 'Cormorant Garamond', serif;
+  overflow-x: hidden;
+  cursor: none;
 }
 
-/* title */
-
-h1{
-font-size:50px;
-letter-spacing:2px;
-background:linear-gradient(45deg,#ffd700,#ff7eb3);
--webkit-background-clip:text;
-color:transparent;
+/* ── CUSTOM CURSOR ── */
+.cursor {
+  width: 18px; height: 18px;
+  border: 2px solid var(--gold);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.15s ease, background 0.2s;
+  transform: translate(-50%, -50%);
+}
+.cursor-dot {
+  width: 5px; height: 5px;
+  background: var(--gold);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: transform 0.05s;
 }
 
-/* emoji celebration */
-
-.emoji{
-font-size:28px;
-margin:15px;
-animation:float 3s infinite alternate;
+/* ── CANVAS BG ── */
+#bgCanvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
 }
 
-@keyframes float{
-from{transform:translateY(0);}
-to{transform:translateY(-10px);}
+/* ── CONFETTI CANVAS ── */
+#confetti {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
 }
 
-/* layout */
-
-.container{
-display:flex;
-justify-content:space-around;
-flex-wrap:wrap;
-margin-top:30px;
+/* ── MAIN WRAPPER ── */
+.page {
+  position: relative;
+  z-index: 2;
+  min-height: 100vh;
 }
 
-/* clock */
-
-.clock{
-width:220px;
-height:220px;
-border:8px solid white;
-border-radius:50%;
-margin:auto;
-position:relative;
-background:rgba(255,255,255,0.1);
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  position: relative;
 }
 
-.number{
-position:absolute;
-font-size:18px;
+.sparkle-ring {
+  position: absolute;
+  width: 600px; height: 600px;
+  border: 1px solid rgba(255,215,0,0.15);
+  border-radius: 50%;
+  animation: spin 20s linear infinite;
+}
+.sparkle-ring::before {
+  content: '✦';
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--gold);
+  font-size: 20px;
+}
+.sparkle-ring:nth-child(2) {
+  width: 450px; height: 450px;
+  animation: spin 15s linear infinite reverse;
+  border-color: rgba(192,132,252,0.2);
+}
+.sparkle-ring:nth-child(2)::before { content: '✧'; color: var(--violet); }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.age-badge {
+  font-family: 'Dancing Script', cursive;
+  font-size: 28px;
+  color: var(--rose);
+  letter-spacing: 3px;
+  margin-bottom: 12px;
+  opacity: 0;
+  animation: fadeUp 1s 0.3s forwards;
 }
 
-.n12{top:5px;left:100px;}
-.n3{top:100px;right:5px;}
-.n6{bottom:5px;left:105px;}
-.n9{top:100px;left:5px;}
-
-.hand{
-position:absolute;
-background:white;
-top:50%;
-left:50%;
-transform-origin:left;
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(56px, 10vw, 120px);
+  font-weight: 900;
+  line-height: 1;
+  text-align: center;
+  background: linear-gradient(135deg, #FFD700 0%, #FF6B9D 40%, #C084FC 70%, #67E8F9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 40px rgba(255,215,0,0.3));
+  opacity: 0;
+  animation: fadeUp 1s 0.6s forwards;
 }
 
-.hour{
-width:60px;
-height:4px;
-transform:rotate(97.5deg);
+.hero-name {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(42px, 8vw, 90px);
+  font-style: italic;
+  font-weight: 400;
+  color: white;
+  text-shadow: 0 0 60px rgba(192,132,252,0.8), 0 0 20px rgba(255,107,157,0.5);
+  margin-top: 8px;
+  opacity: 0;
+  animation: fadeUp 1s 0.9s forwards;
 }
 
-.minute{
-width:80px;
-height:3px;
-transform:rotate(90deg);
+.hero-sub {
+  font-size: 20px;
+  font-weight: 300;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  margin-top: 20px;
+  opacity: 0;
+  animation: fadeUp 1s 1.2s forwards;
 }
 
-/* calendar */
-
-.calendar{
-margin-top:20px;
-background:rgba(255,255,255,0.2);
-padding:20px;
-border-radius:15px;
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-.calendar table{
-border-collapse:collapse;
+.scroll-hint {
+  position: absolute;
+  bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255,255,255,0.3);
+  font-size: 13px;
+  letter-spacing: 3px;
+  animation: bounce 2s infinite;
+}
+.scroll-hint::after {
+  content: '';
+  width: 1px;
+  height: 50px;
+  background: linear-gradient(to bottom, rgba(255,215,0,0.5), transparent);
+}
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(8px); }
 }
 
-.calendar td,.calendar th{
-padding:8px;
+/* ── FLOATING EMOJIS ── */
+.float-emojis {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+.fe {
+  position: absolute;
+  font-size: 28px;
+  animation: floatUp var(--dur) var(--delay) ease-in infinite;
+  opacity: 0;
+}
+@keyframes floatUp {
+  0%   { opacity: 0; transform: translateY(100vh) rotate(0deg) scale(0.5); }
+  10%  { opacity: 0.8; }
+  90%  { opacity: 0.6; }
+  100% { opacity: 0; transform: translateY(-200px) rotate(720deg) scale(1.2); }
 }
 
-.bday{
-background:#ffd700;
-color:black;
-border-radius:50%;
-font-weight:bold;
+/* ── SECTIONS ── */
+.section {
+  padding: 80px 40px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-/* cloud quotes */
-
-.cloud{
-background:white;
-color:black;
-padding:15px;
-border-radius:50px;
-display:inline-block;
-margin:10px;
-max-width:200px;
+.section-label {
+  font-size: 12px;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.section-label::before, .section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
 }
 
-/* floating photo */
-
-.photo{
-position:absolute;
-right:40px;
-bottom:60px;
-width:200px;
-border-radius:20px;
-box-shadow:0 0 20px black;
-cursor:pointer;
+/* ── CLOCK SECTION ── */
+.time-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
 }
 
-/* name languages */
+@media (max-width: 700px) { .time-section { grid-template-columns: 1fr; } }
 
-.languages{
-margin-top:40px;
-display:grid;
-grid-template-columns:repeat(5,1fr);
-gap:10px;
-font-size:18px;
+.clock-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
 }
 
-.languages div{
-background:rgba(255,255,255,0.15);
-padding:8px;
-border-radius:10px;
+.clock {
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(255,215,0,0.1), rgba(10,0,16,0.8));
+  border: 2px solid rgba(255,215,0,0.4);
+  position: relative;
+  box-shadow:
+    0 0 40px rgba(255,215,0,0.2),
+    inset 0 0 40px rgba(255,215,0,0.05);
 }
 
-/* popup */
-
-.modal{
-display:none;
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.8);
-justify-content:center;
-align-items:center;
+.clock::before {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.08);
 }
 
-.box{
-background:white;
-color:black;
-padding:30px;
-border-radius:15px;
-text-align:center;
+.tick {
+  position: absolute;
+  width: 2px;
+  height: 12px;
+  background: rgba(255,255,255,0.3);
+  top: 10px;
+  left: 50%;
+  transform-origin: 0 120px;
+}
+.tick:nth-child(3n+1) { background: rgba(255,215,0,0.7); height: 18px; width: 3px; }
+
+.clock-num {
+  position: absolute;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.8);
+  transform: translate(-50%, -50%);
 }
 
-button{
-padding:10px 20px;
-margin:10px;
-font-size:18px;
-border:none;
-border-radius:10px;
-cursor:pointer;
+.clock-center {
+  position: absolute;
+  width: 10px; height: 10px;
+  background: var(--gold);
+  border-radius: 50%;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  box-shadow: 0 0 10px var(--gold);
 }
 
-.yes{
-background:#28a745;
-color:white;
+.hand {
+  position: absolute;
+  bottom: 50%;
+  left: 50%;
+  transform-origin: bottom center;
+  border-radius: 4px 4px 0 0;
 }
 
-.no{
-background:#ff4b6e;
-color:white;
-position:relative;
+.hand-hour {
+  width: 4px;
+  height: 75px;
+  background: linear-gradient(to top, var(--gold), rgba(255,215,0,0.5));
+  margin-left: -2px;
+}
+
+.hand-min {
+  width: 3px;
+  height: 100px;
+  background: linear-gradient(to top, white, rgba(255,255,255,0.4));
+  margin-left: -1.5px;
+}
+
+.hand-sec {
+  width: 1.5px;
+  height: 108px;
+  background: var(--rose);
+  margin-left: -0.75px;
+}
+
+.clock-label {
+  text-align: center;
+  font-size: 16px;
+  color: rgba(255,255,255,0.5);
+  letter-spacing: 2px;
+}
+.clock-label span {
+  color: var(--gold);
+  font-size: 22px;
+  font-family: 'Playfair Display', serif;
+  display: block;
+}
+
+/* ── CALENDAR ── */
+.calendar-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,215,0,0.2);
+  border-radius: 24px;
+  padding: 30px;
+  backdrop-filter: blur(10px);
+}
+
+.cal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.cal-month {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-style: italic;
+  color: var(--gold);
+}
+
+.cal-year {
+  font-size: 14px;
+  letter-spacing: 4px;
+  color: rgba(255,255,255,0.4);
+}
+
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  text-align: center;
+}
+
+.cal-grid .day-name {
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.35);
+  padding: 8px 0;
+}
+
+.cal-day {
+  padding: 10px 0;
+  font-size: 15px;
+  border-radius: 10px;
+  color: rgba(255,255,255,0.6);
+  transition: all 0.3s;
+}
+.cal-day:hover { background: rgba(255,255,255,0.08); }
+
+.cal-day.bday {
+  background: linear-gradient(135deg, var(--gold), var(--rose));
+  color: #0a0010;
+  font-weight: 900;
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  border-radius: 50%;
+  box-shadow: 0 0 20px rgba(255,107,157,0.5), 0 0 40px rgba(255,215,0,0.3);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(255,107,157,0.5), 0 0 40px rgba(255,215,0,0.3); }
+  50% { box-shadow: 0 0 40px rgba(255,107,157,0.9), 0 0 70px rgba(255,215,0,0.6); }
+}
+
+/* ── QUOTES ── */
+.quotes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin-top: 40px;
+}
+
+.quote-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px;
+  padding: 28px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s ease;
+  cursor: default;
+}
+
+.quote-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--glow);
+  opacity: 0;
+  transition: opacity 0.4s;
+  border-radius: 20px;
+}
+
+.quote-card:hover::before { opacity: 1; }
+.quote-card:hover { border-color: rgba(255,215,0,0.3); transform: translateY(-4px); }
+
+.quote-card:nth-child(1) { --glow: linear-gradient(135deg, rgba(255,215,0,0.06), transparent); }
+.quote-card:nth-child(2) { --glow: linear-gradient(135deg, rgba(255,107,157,0.06), transparent); }
+.quote-card:nth-child(3) { --glow: linear-gradient(135deg, rgba(192,132,252,0.06), transparent); }
+.quote-card:nth-child(4) { --glow: linear-gradient(135deg, rgba(103,232,249,0.06), transparent); }
+.quote-card:nth-child(5) { --glow: linear-gradient(135deg, rgba(255,215,0,0.06), transparent); }
+
+.quote-icon {
+  font-size: 36px;
+  margin-bottom: 14px;
+  display: block;
+  filter: drop-shadow(0 0 8px rgba(255,215,0,0.4));
+}
+
+.quote-text {
+  font-size: 18px;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.85);
+  font-style: italic;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── NAME GLOBE ── */
+.names-section { padding: 80px 40px; }
+
+.names-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin-top: 40px;
+}
+
+@media (max-width: 900px) { .names-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 500px) { .names-grid { grid-template-columns: repeat(2, 1fr); } }
+
+.name-pill {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 14px 12px;
+  text-align: center;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.name-pill::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--c1), var(--c2));
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.name-pill:hover::before { opacity: 0.12; }
+.name-pill:hover { border-color: rgba(255,215,0,0.4); transform: scale(1.04); }
+
+.lang-name {
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  display: block;
+  margin-bottom: 6px;
+  position: relative;
+  z-index: 1;
+}
+
+.lang-text {
+  font-size: 17px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.9);
+  position: relative;
+  z-index: 1;
+}
+
+/* ── PHOTO POPUP ── */
+.photo-trigger {
+  display: block;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,215,0,0.15), rgba(192,132,252,0.1));
+  border: 2px dashed rgba(255,215,0,0.4);
+  cursor: none;
+  margin: 60px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.4s;
+  animation: spinBorder 8s linear infinite;
+  position: relative;
+}
+.photo-trigger:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 60px rgba(255,215,0,0.3);
+}
+.photo-trigger-inner {
+  text-align: center;
+}
+.photo-trigger-icon { font-size: 48px; margin-bottom: 8px; display: block; }
+.photo-trigger-text { font-size: 13px; letter-spacing: 3px; color: rgba(255,255,255,0.5); }
+
+@keyframes spinBorder {
+  from { border-color: rgba(255,215,0,0.4) rgba(192,132,252,0.4) rgba(255,107,157,0.4) rgba(103,232,249,0.4); }
+  to   { border-color: rgba(103,232,249,0.4) rgba(255,215,0,0.4) rgba(192,132,252,0.4) rgba(255,107,157,0.4); }
+}
+
+/* ── MODAL ── */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(20px);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal.active { display: flex; animation: fadeIn 0.4s ease; }
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.modal-box {
+  background: linear-gradient(135deg, rgba(20,5,40,0.95), rgba(10,0,16,0.98));
+  border: 1px solid rgba(255,215,0,0.3);
+  border-radius: 32px;
+  padding: 50px 40px;
+  max-width: 480px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  animation: scaleIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 0 80px rgba(255,215,0,0.15);
+}
+
+@keyframes scaleIn { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+.modal-emoji { font-size: 60px; display: block; margin-bottom: 20px; animation: wiggle 1s infinite; }
+@keyframes wiggle {
+  0%, 100% { transform: rotate(-5deg); }
+  50% { transform: rotate(5deg); }
+}
+
+.modal-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-style: italic;
+  margin-bottom: 30px;
+  background: linear-gradient(135deg, var(--gold), var(--rose));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.btn-wrap { display: flex; gap: 16px; justify-content: center; }
+
+.btn {
+  padding: 14px 32px;
+  border-radius: 50px;
+  border: none;
+  font-size: 18px;
+  font-family: 'Cormorant Garamond', serif;
+  cursor: none;
+  transition: all 0.3s;
+  font-weight: 600;
+}
+
+.btn-yes {
+  background: linear-gradient(135deg, var(--gold), var(--rose));
+  color: #0a0010;
+  box-shadow: 0 0 30px rgba(255,107,157,0.4);
+}
+.btn-yes:hover { transform: scale(1.05); box-shadow: 0 0 50px rgba(255,107,157,0.7); }
+
+.btn-no {
+  background: rgba(255,255,255,0.08);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.15);
+  position: relative;
+}
+
+/* ── FOOTER ── */
+.footer {
+  text-align: center;
+  padding: 60px 20px;
+  color: rgba(255,255,255,0.2);
+  font-size: 14px;
+  letter-spacing: 3px;
+}
+.footer span { color: var(--rose); }
+
+/* ── DIVIDER ── */
+.divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,215,0,0.3), transparent);
+  margin: 20px 0;
 }
 
 </style>
 </head>
-
 <body>
 
-<div class="overlay">
+<div class="cursor" id="cursor"></div>
+<div class="cursor-dot" id="cursorDot"></div>
 
-<h1>🎉 Happy 25th Birthday 🎉</h1>
+<canvas id="bgCanvas"></canvas>
+<canvas id="confetti"></canvas>
 
-<div>
+<!-- Floating emojis -->
+<div class="float-emojis" id="floatEmojis"></div>
 
-<span class="emoji">🎈</span>
-<span class="emoji">🎉</span>
-<span class="emoji">✨</span>
-<span class="emoji">🎊</span>
-<span class="emoji">🥳</span>
+<div class="page">
 
-<span class="emoji">🎈</span>
-<span class="emoji">🎉</span>
-<span class="emoji">✨</span>
-<span class="emoji">🎊</span>
-<span class="emoji">🥳</span>
+  <!-- ── HERO ── -->
+  <section class="hero">
+    <div class="sparkle-ring"></div>
+    <div class="sparkle-ring"></div>
+    <div class="age-badge">✦ Twenty Five Years ✦</div>
+    <h1 class="hero-title">Happy Birthday</h1>
+    <h2 class="hero-name">Praveen</h2>
+    <p class="hero-sub">April 3 · 2001 — 2026</p>
+    <div class="scroll-hint">scroll</div>
+  </section>
 
-<span class="emoji">🎈</span>
-<span class="emoji">🎉</span>
-<span class="emoji">✨</span>
-<span class="emoji">🎊</span>
-<span class="emoji">🥳</span>
+  <!-- ── TIME & CALENDAR ── -->
+  <section class="section">
+    <div class="section-label">The Moment You Arrived</div>
+    <div class="time-section">
 
-<span class="emoji">🎈</span>
-<span class="emoji">🎉</span>
-<span class="emoji">✨</span>
-<span class="emoji">🎊</span>
-<span class="emoji">🥳</span>
+      <!-- Clock -->
+      <div class="clock-wrap">
+        <div class="clock" id="clock">
+          <div class="clock-center"></div>
+          <div class="hand hand-hour" id="hourHand"></div>
+          <div class="hand hand-min"  id="minHand"></div>
+          <div class="hand hand-sec"  id="secHand"></div>
+        </div>
+        <div class="clock-label">
+          <span>3 : 15</span>
+          Your Birth Time
+        </div>
+      </div>
 
-<span class="emoji">🎈</span>
-<span class="emoji">🎉</span>
-<span class="emoji">✨</span>
-<span class="emoji">🎊</span>
-<span class="emoji">🥳</span>
+      <!-- Calendar -->
+      <div class="calendar-card">
+        <div class="cal-header">
+          <div class="cal-month">April</div>
+          <div class="cal-year">2 0 0 1</div>
+        </div>
+        <div class="cal-grid">
+          <div class="day-name">Su</div><div class="day-name">Mo</div>
+          <div class="day-name">Tu</div><div class="day-name">We</div>
+          <div class="day-name">Th</div><div class="day-name">Fr</div>
+          <div class="day-name">Sa</div>
 
+          <div class="cal-day">1</div><div class="cal-day">2</div>
+          <div class="cal-day bday">3</div>
+          <div class="cal-day">4</div><div class="cal-day">5</div>
+          <div class="cal-day">6</div><div class="cal-day">7</div>
+
+          <div class="cal-day">8</div><div class="cal-day">9</div>
+          <div class="cal-day">10</div><div class="cal-day">11</div>
+          <div class="cal-day">12</div><div class="cal-day">13</div>
+          <div class="cal-day">14</div>
+
+          <div class="cal-day">15</div><div class="cal-day">16</div>
+          <div class="cal-day">17</div><div class="cal-day">18</div>
+          <div class="cal-day">19</div><div class="cal-day">20</div>
+          <div class="cal-day">21</div>
+
+          <div class="cal-day">22</div><div class="cal-day">23</div>
+          <div class="cal-day">24</div><div class="cal-day">25</div>
+          <div class="cal-day">26</div><div class="cal-day">27</div>
+          <div class="cal-day">28</div>
+
+          <div class="cal-day">29</div><div class="cal-day">30</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider" style="max-width:1200px;margin:0 auto;"></div>
+
+  <!-- ── QUOTES ── -->
+  <section class="section">
+    <div class="section-label">Words From The Heart</div>
+    <div class="quotes-grid">
+      <div class="quote-card">
+        <span class="quote-icon">🌟</span>
+        <p class="quote-text">You are not just my brother, you are my strength — in every storm and every sunrise.</p>
+      </div>
+      <div class="quote-card">
+        <span class="quote-icon">🫂</span>
+        <p class="quote-text">Some friends become family. You are that rare, irreplaceable person.</p>
+      </div>
+      <div class="quote-card">
+        <span class="quote-icon">💫</span>
+        <p class="quote-text">Life gave me a brother. Destiny gave me a best friend. You are both.</p>
+      </div>
+      <div class="quote-card">
+        <span class="quote-icon">❤️</span>
+        <p class="quote-text">No matter what happens, you will always hold a place that no one else can fill.</p>
+      </div>
+      <div class="quote-card">
+        <span class="quote-icon">🙏</span>
+        <p class="quote-text">Thank you for always standing beside me — through every laugh, every tear, every moment.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider" style="max-width:1200px;margin:0 auto;"></div>
+
+  <!-- ── NAMES ── -->
+  <section class="names-section" style="max-width:1200px;margin:0 auto;">
+    <div class="section-label">Your Name, Every Language</div>
+    <div class="names-grid" id="namesGrid"></div>
+  </section>
+
+  <div class="divider" style="max-width:1200px;margin:0 auto;"></div>
+
+  <!-- ── PHOTO TRIGGER ── -->
+  <div style="text-align:center;padding:40px 20px;">
+    <div class="section-label" style="justify-content:center;">A Question For You</div>
+    <div class="photo-trigger" onclick="openModal()">
+      <div class="photo-trigger-inner">
+        <span class="photo-trigger-icon">📸</span>
+        <span class="photo-trigger-text">TAP TO OPEN</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">Made with <span>♥</span> for Praveen · April 3, 2026</div>
+
+</div><!-- end .page -->
+
+<!-- ── MODAL ── -->
+<div class="modal" id="modal">
+  <div class="modal-box" id="modalBox">
+    <span class="modal-emoji">🥹</span>
+    <h2 class="modal-title">Will you be my forever friend & brother?</h2>
+    <div class="btn-wrap">
+      <button class="btn btn-yes" onclick="sayYes()">Yes ❤️</button>
+      <button class="btn btn-no" id="noBtn">No</button>
+    </div>
+  </div>
 </div>
 
-<div class="container">
-
-<!-- clock -->
-
-<div>
-
-<div class="clock">
-
-<div class="number n12">12</div>
-<div class="number n3">3</div>
-<div class="number n6">6</div>
-<div class="number n9">9</div>
-
-<div class="hand hour"></div>
-<div class="hand minute"></div>
-
-</div>
-
-<p>Birth Time : 3:15</p>
-
-<!-- calendar -->
-
-<div class="calendar">
-
-<h3>April 2001</h3>
-
-<table>
-
-<tr>
-<th>Su</th><th>Mo</th><th>Tu</th><th>We</th>
-<th>Th</th><th>Fr</th><th>Sa</th>
-</tr>
-
-<tr>
-<td>1</td><td>2</td><td class="bday">3</td>
-<td>4</td><td>5</td><td>6</td><td>7</td>
-</tr>
-
-<tr>
-<td>8</td><td>9</td><td>10</td><td>11</td>
-<td>12</td><td>13</td><td>14</td>
-</tr>
-
-</table>
-
-</div>
-
-</div>
-
-<!-- cloud quotes -->
-
-<div>
-
-<div class="cloud">You are not just my brother, you are my strength.</div>
-<div class="cloud">Some friends become family, you are that person.</div>
-<div class="cloud">Life gave me a brother, destiny gave me a best friend.</div>
-<div class="cloud">No matter what happens you will always be important to me.</div>
-<div class="cloud">Thank you for always standing with me.</div>
-
-</div>
-
-</div>
-
-<!-- languages -->
-
-<div class="languages">
-
-<div>English - Praveen</div>
-<div>Tamil - பிரவீன்</div>
-<div>Hindi - प्रवीण</div>
-<div>Telugu - ప్రవీణ్</div>
-<div>Malayalam - പ്രവീൺ</div>
-
-<div>Kannada - ಪ್ರವೀಣ್</div>
-<div>Bengali - প্রবীন</div>
-<div>Gujarati - પ્રવીણ</div>
-<div>Punjabi - ਪ੍ਰਵੀਣ</div>
-<div>Marathi - प्रवीण</div>
-
-<div>Urdu - پروین</div>
-<div>Nepali - प्रवीण</div>
-<div>Sinhalese - ප්‍රවීන්</div>
-<div>Thai - พรวีน</div>
-<div>Japanese - プラヴィーン</div>
-
-<div>Korean - 프라빈</div>
-<div>Chinese - 普拉文</div>
-<div>Russian - Правин</div>
-<div>Spanish - Praveen</div>
-<div>French - Praveen</div>
-
-<div>German - Praveen</div>
-<div>Italian - Praveen</div>
-<div>Portuguese - Praveen</div>
-<div>Turkish - Praveen</div>
-<div>Arabic - برافين</div>
-
-</div>
-
-<img src="photo.jpg" class="photo" onclick="openPopup()">
-
-</div>
-
-<div class="modal" id="popup">
-
-<div class="box">
-
-<h2>Will you be my forever friend & brother?</h2>
-
-<button class="yes" onclick="thanks()">Yes ❤️</button>
-<button class="no" id="noBtn">No</button>
-
-</div>
-
-</div>
 
 <script>
-
-function openPopup(){
-document.getElementById("popup").style.display="flex";
-}
-
-function thanks(){
-document.querySelector(".box").innerHTML=
-"<h2>Thank You ❤️</h2><p>You will always be my brother and best friend.</p>";
-}
-
-let no=document.getElementById("noBtn");
-
-no.addEventListener("mouseover",function(){
-
-let x=Math.random()*200-100;
-let y=Math.random()*200-100;
-
-no.style.transform=`translate(${x}px,${y}px)`;
-
+/* ── CURSOR ── */
+const cursor = document.getElementById('cursor');
+const dot    = document.getElementById('cursorDot');
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top  = e.clientY + 'px';
+  dot.style.left    = e.clientX + 'px';
+  dot.style.top     = e.clientY + 'px';
+});
+document.querySelectorAll('button, .photo-trigger, .quote-card, .name-pill').forEach(el => {
+  el.addEventListener('mouseenter', () => cursor.style.transform = 'translate(-50%,-50%) scale(2)');
+  el.addEventListener('mouseleave', () => cursor.style.transform = 'translate(-50%,-50%) scale(1)');
 });
 
-</script>
+/* ── ANIMATED BACKGROUND ── */
+const bgC  = document.getElementById('bgCanvas');
+const bgCx = bgC.getContext('2d');
+bgC.width  = window.innerWidth;
+bgC.height = window.innerHeight;
+window.addEventListener('resize', () => {
+  bgC.width  = window.innerWidth;
+  bgC.height = window.innerHeight;
+});
 
+const stars = Array.from({length: 200}, () => ({
+  x: Math.random(), y: Math.random(),
+  r: Math.random() * 1.5 + 0.3,
+  a: Math.random(),
+  speed: Math.random() * 0.005 + 0.002,
+  color: ['#FFD700','#FF6B9D','#C084FC','#67E8F9','#FFFFFF'][Math.floor(Math.random()*5)]
+}));
+
+function drawBg() {
+  const w = bgC.width, h = bgC.height;
+  bgCx.clearRect(0,0,w,h);
+
+  // Deep gradient bg
+  const grad = bgCx.createRadialGradient(w*0.3, h*0.3, 0, w*0.5, h*0.5, w);
+  grad.addColorStop(0, '#1a0030');
+  grad.addColorStop(0.4, '#0d001a');
+  grad.addColorStop(1, '#000008');
+  bgCx.fillStyle = grad;
+  bgCx.fillRect(0,0,w,h);
+
+  // Nebula blobs
+  [[0.2,0.3,'rgba(192,132,252,0.06)'],[0.8,0.7,'rgba(255,107,157,0.05)'],[0.5,0.1,'rgba(103,232,249,0.04)'],
+   [0.1,0.8,'rgba(255,215,0,0.03)'],[0.9,0.2,'rgba(192,132,252,0.04)']].forEach(([cx,cy,col]) => {
+    const g = bgCx.createRadialGradient(cx*w,cy*h,0,cx*w,cy*h,w*0.4);
+    g.addColorStop(0,col); g.addColorStop(1,'transparent');
+    bgCx.fillStyle=g; bgCx.fillRect(0,0,w,h);
+  });
+
+  // Stars
+  stars.forEach(s => {
+    s.a += s.speed;
+    const alpha = (Math.sin(s.a)+1)/2;
+    bgCx.beginPath();
+    bgCx.arc(s.x*w, s.y*h, s.r, 0, Math.PI*2);
+    bgCx.fillStyle = s.color.replace(')', `,${alpha})`).replace('rgb(','rgba(').replace('#','');
+    // quick hex→rgba
+    bgCx.globalAlpha = alpha * 0.9;
+    bgCx.fillStyle = s.color;
+    bgCx.fill();
+    bgCx.globalAlpha = 1;
+  });
+}
+setInterval(drawBg, 50);
+drawBg();
+
+/* ── CONFETTI (auto-burst on load) ── */
+const confC  = document.getElementById('confetti');
+const confCx = confC.getContext('2d');
+confC.width  = window.innerWidth;
+confC.height = window.innerHeight;
+window.addEventListener('resize', () => { confC.width=window.innerWidth; confC.height=window.innerHeight; });
+
+const pieces = [];
+const COLORS = ['#FFD700','#FF6B9D','#C084FC','#67E8F9','#FFFFFF','#FF4500','#00FA9A'];
+
+function spawnBurst(x, y, n=80) {
+  for(let i=0;i<n;i++) {
+    const angle = Math.random()*Math.PI*2;
+    const speed = Math.random()*8+2;
+    pieces.push({
+      x, y,
+      vx: Math.cos(angle)*speed,
+      vy: Math.sin(angle)*speed - 4,
+      r: Math.random()*5+2,
+      c: COLORS[Math.floor(Math.random()*COLORS.length)],
+      rot: Math.random()*360,
+      rspeed: (Math.random()-0.5)*10,
+      life: 1,
+      shape: Math.random()<0.5 ? 'rect' : 'circle'
+    });
+  }
+}
+
+function animateConfetti() {
+  confCx.clearRect(0,0,confC.width,confC.height);
+  for(let i=pieces.length-1;i>=0;i--) {
+    const p=pieces[i];
+    p.x+=p.vx; p.y+=p.vy; p.vy+=0.18;
+    p.rot+=p.rspeed; p.life-=0.012;
+    if(p.life<=0||p.y>confC.height+50){pieces.splice(i,1);continue;}
+    confCx.save();
+    confCx.globalAlpha=p.life;
+    confCx.translate(p.x,p.y);
+    confCx.rotate(p.rot*Math.PI/180);
+    confCx.fillStyle=p.c;
+    if(p.shape==='rect') confCx.fillRect(-p.r,-p.r/2,p.r*2,p.r);
+    else { confCx.beginPath(); confCx.arc(0,0,p.r/2,0,Math.PI*2); confCx.fill(); }
+    confCx.restore();
+  }
+  requestAnimationFrame(animateConfetti);
+}
+animateConfetti();
+
+// Auto burst on load
+setTimeout(()=>{
+  for(let i=0;i<5;i++) setTimeout(()=>spawnBurst(
+    Math.random()*window.innerWidth, -20, 60
+  ), i*300);
+}, 800);
+
+// Continuous gentle drops
+setInterval(()=>spawnBurst(Math.random()*window.innerWidth,-10,15),2500);
+
+/* ── FLOATING EMOJIS ── */
+const emojis = ['🎈','🎉','✨','🎊','🥳','💫','🌟','💖','🎁','🎂','🌸','🦋'];
+const container = document.getElementById('floatEmojis');
+emojis.forEach((em,i)=>{
+  const span = document.createElement('span');
+  span.className='fe';
+  span.textContent=em;
+  span.style.setProperty('--dur', (8+Math.random()*6)+'s');
+  span.style.setProperty('--delay', (Math.random()*8)+'s');
+  span.style.left = (Math.random()*95)+'%';
+  container.appendChild(span);
+});
+
+/* ── LIVE CLOCK (set to 3:15) ── */
+function setClockToTime(h, m) {
+  const hourDeg = (h % 12) * 30 + m * 0.5 - 90;
+  const minDeg  = m * 6 - 90;
+  const secDeg  = -90; // static
+  document.getElementById('hourHand').style.transform = `rotate(${hourDeg}deg)`;
+  document.getElementById('minHand').style.transform  = `rotate(${minDeg}deg)`;
+  document.getElementById('secHand').style.transform  = `rotate(${secDeg}deg)`;
+}
+
+// Add clock ticks & numbers
+const clockEl = document.getElementById('clock');
+for(let i=0;i<60;i++){
+  const tick=document.createElement('div');
+  tick.className='tick';
+  tick.style.transform=`rotate(${i*6}deg)`;
+  clockEl.appendChild(tick);
+}
+const nums=[12,1,2,3,4,5,6,7,8,9,10,11];
+nums.forEach((n,i)=>{
+  const el=document.createElement('div');
+  el.className='clock-num';
+  const angle=(i*30-90)*Math.PI/180;
+  const r=100;
+  el.style.left=(130+r*Math.cos(angle))+'px';
+  el.style.top=(130+r*Math.sin(angle))+'px';
+  el.textContent=n;
+  clockEl.appendChild(el);
+});
+
+setClockToTime(3,15);
+
+// Tick the seconds hand from 3:15 onward
+let totalSec = 3*3600+15*60;
+setInterval(()=>{
+  totalSec++;
+  const h=Math.floor(totalSec/3600)%12;
+  const m=Math.floor((totalSec%3600)/60);
+  const s=totalSec%60;
+  const hd=h*30+m*0.5-90;
+  const md=m*6+s*0.1-90;
+  const sd=s*6-90;
+  document.getElementById('hourHand').style.transform=`rotate(${hd}deg)`;
+  document.getElementById('minHand').style.transform=`rotate(${md}deg)`;
+  document.getElementById('secHand').style.transition='transform 0.3s';
+  document.getElementById('secHand').style.transform=`rotate(${sd}deg)`;
+}, 1000);
+
+/* ── NAMES GRID ── */
+const names = [
+  {lang:'English',    text:'Praveen',     c1:'#FFD700',c2:'#FF6B9D'},
+  {lang:'Tamil',      text:'பிரவீன்',     c1:'#FF6B9D',c2:'#C084FC'},
+  {lang:'Hindi',      text:'प्रवीण',      c1:'#C084FC',c2:'#67E8F9'},
+  {lang:'Telugu',     text:'ప్రవీణ్',    c1:'#67E8F9',c2:'#FFD700'},
+  {lang:'Malayalam',  text:'പ്രവീൺ',      c1:'#FFD700',c2:'#C084FC'},
+  {lang:'Kannada',    text:'ಪ್ರವೀಣ್',    c1:'#FF6B9D',c2:'#FFD700'},
+  {lang:'Bengali',    text:'প্রবীন',      c1:'#C084FC',c2:'#FF6B9D'},
+  {lang:'Gujarati',   text:'પ્રવીણ',      c1:'#67E8F9',c2:'#C084FC'},
+  {lang:'Punjabi',    text:'ਪ੍ਰਵੀਣ',     c1:'#FFD700',c2:'#67E8F9'},
+  {lang:'Marathi',    text:'प्रवीण',      c1:'#FF6B9D',c2:'#C084FC'},
+  {lang:'Urdu',       text:'پروین',       c1:'#C084FC',c2:'#FFD700'},
+  {lang:'Nepali',     text:'प्रवीण',      c1:'#67E8F9',c2:'#FF6B9D'},
+  {lang:'Sinhalese',  text:'ප්‍රවීන්',   c1:'#FFD700',c2:'#C084FC'},
+  {lang:'Thai',       text:'พรวีน',       c1:'#FF6B9D',c2:'#67E8F9'},
+  {lang:'Japanese',   text:'プラヴィーン', c1:'#C084FC',c2:'#FFD700'},
+  {lang:'Korean',     text:'프라빈',       c1:'#67E8F9',c2:'#FF6B9D'},
+  {lang:'Chinese',    text:'普拉文',       c1:'#FFD700',c2:'#C084FC'},
+  {lang:'Russian',    text:'Правин',      c1:'#FF6B9D',c2:'#FFD700'},
+  {lang:'Spanish',    text:'Praveen',     c1:'#C084FC',c2:'#67E8F9'},
+  {lang:'French',     text:'Praveen',     c1:'#67E8F9',c2:'#C084FC'},
+  {lang:'German',     text:'Praveen',     c1:'#FFD700',c2:'#FF6B9D'},
+  {lang:'Italian',    text:'Praveen',     c1:'#FF6B9D',c2:'#C084FC'},
+  {lang:'Portuguese', text:'Praveen',     c1:'#C084FC',c2:'#FFD700'},
+  {lang:'Turkish',    text:'Praveen',     c1:'#67E8F9',c2:'#FF6B9D'},
+  {lang:'Arabic',     text:'برافين',      c1:'#FFD700',c2:'#67E8F9'},
+];
+
+const grid = document.getElementById('namesGrid');
+names.forEach(n=>{
+  const div=document.createElement('div');
+  div.className='name-pill';
+  div.style.setProperty('--c1',n.c1);
+  div.style.setProperty('--c2',n.c2);
+  div.innerHTML=`<span class="lang-name">${n.lang}</span><span class="lang-text">${n.text}</span>`;
+  div.addEventListener('click',()=>spawnBurst(div.getBoundingClientRect().left+40, div.getBoundingClientRect().top+30, 30));
+  grid.appendChild(div);
+});
+
+/* ── MODAL ── */
+function openModal() {
+  document.getElementById('modal').classList.add('active');
+  spawnBurst(window.innerWidth/2, window.innerHeight/2, 50);
+}
+function sayYes() {
+  document.getElementById('modalBox').innerHTML=`
+    <span style="font-size:72px;display:block;margin-bottom:20px;animation:wiggle 1s infinite">❤️</span>
+    <h2 style="font-family:'Playfair Display',serif;font-size:28px;font-style:italic;
+        background:linear-gradient(135deg,#FFD700,#FF6B9D);-webkit-background-clip:text;
+        -webkit-text-fill-color:transparent;margin-bottom:16px;">Thank You, Praveen</h2>
+    <p style="color:rgba(255,255,255,0.7);font-size:18px;line-height:1.7">
+      You will always be my brother and my best friend. Forever. ✨
+    </p>
+    <button class="btn btn-yes" style="margin-top:28px" onclick="document.getElementById('modal').classList.remove('active')">Close ❤️</button>
+  `;
+  for(let i=0;i<8;i++) setTimeout(()=>spawnBurst(Math.random()*window.innerWidth, Math.random()*window.innerHeight, 40), i*200);
+}
+
+document.getElementById('modal').addEventListener('click', e=>{
+  if(e.target===document.getElementById('modal')) document.getElementById('modal').classList.remove('active');
+});
+
+// Runaway "No" button
+const noBtn = document.getElementById('noBtn');
+if(noBtn) {
+  noBtn.addEventListener('mouseover',()=>{
+    const x=(Math.random()-0.5)*300, y=(Math.random()-0.5)*300;
+    noBtn.style.transform=`translate(${x}px,${y}px)`;
+  });
+}
+
+/* ── CLICK SPARKS ── */
+document.addEventListener('click', e=>{
+  if(e.target.tagName!=='BUTTON') spawnBurst(e.clientX, e.clientY, 20);
+});
+</script>
 </body>
 </html>
-```
