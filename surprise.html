@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Birthday Surprise</title>
+
+<style>
+
+body{
+font-family: Arial;
+background:#f0f8ff;
+text-align:center;
+}
+
+.container{
+display:flex;
+justify-content:space-around;
+align-items:center;
+margin-top:40px;
+}
+
+img{
+width:220px;
+border-radius:20px;
+cursor:pointer;
+box-shadow:0 0 20px grey;
+}
+
+.clock{
+width:200px;
+height:200px;
+border:8px solid black;
+border-radius:50%;
+position:relative;
+margin:auto;
+}
+
+.hand{
+position:absolute;
+width:50%;
+height:3px;
+background:black;
+top:50%;
+transform-origin:100%;
+}
+
+.calendar{
+font-size:25px;
+margin-bottom:20px;
+}
+
+button{
+padding:10px 20px;
+font-size:18px;
+margin:10px;
+cursor:pointer;
+}
+
+#noBtn{
+position:relative;
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>🎂 Birthday Surprise 🎂</h1>
+
+<div class="calendar">
+📅 Birthday: January 16
+</div>
+
+<div class="container">
+
+<div>
+
+<h2>Name in 5 Languages</h2>
+
+<p>English: Praveen</p>
+<p>Tamil: பிரவீன்</p>
+<p>Hindi: प्रवीण</p>
+<p>Telugu: ప్రవీణ్</p>
+<p>Malayalam: പ്രവീൺ</p>
+
+<div class="clock" id="clock">
+<div class="hand" id="hour"></div>
+<div class="hand" id="minute"></div>
+<div class="hand" id="second"></div>
+</div>
+
+</div>
+
+<div>
+<img src="photo.jpg" onclick="askQuestion()">
+<p>Click My Photo ❤️</p>
+</div>
+
+</div>
+
+<script>
+
+function askQuestion(){
+
+let choice = confirm("Will you be my forever friend and brother?");
+
+if(choice){
+alert("Thank you for being my forever brother ❤️");
+}
+
+}
+
+setInterval(function(){
+
+const now = new Date();
+const sec = now.getSeconds();
+const min = now.getMinutes();
+const hr = now.getHours();
+
+document.getElementById("second").style.transform =
+"rotate(" + sec*6 + "deg)";
+
+document.getElementById("minute").style.transform =
+"rotate(" + min*6 + "deg)";
+
+document.getElementById("hour").style.transform =
+"rotate(" + hr*30 + "deg)";
+
+},1000);
+
+</script>
+
+</body>
+</html>
