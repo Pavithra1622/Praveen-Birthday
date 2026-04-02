@@ -17,27 +17,17 @@ body{background:#020b18;color:#e8f4ff;font-family:'Cormorant Garamond',Georgia,s
 .page{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:50px 20px 90px;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:translateY(0);}}
 
-/* PRAVEEN PHOTO — top, before hero */
+/* PRAVEEN PHOTO */
 .praveen-top{text-align:center;margin-bottom:36px;opacity:0;animation:fadeUp 1s 0.1s forwards;}
 .praveen-top .pframe{
-  display:inline-block;
-  position:relative;
-  border-radius:50%;
-  overflow:hidden;
+  display:inline-block;position:relative;border-radius:50%;overflow:hidden;
   border:3px solid rgba(96,165,250,0.5);
-  box-shadow:0 0 60px rgba(37,99,235,0.4), 0 0 120px rgba(37,99,235,0.15);
-  width:180px;
-  height:180px;
+  box-shadow:0 0 60px rgba(37,99,235,0.4),0 0 120px rgba(37,99,235,0.15);
+  width:180px;height:180px;
 }
 .praveen-top .pframe img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block;transition:transform 0.6s ease;}
 .praveen-top .pframe:hover img{transform:scale(1.07);}
-.praveen-top .pframe::after{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(to top,rgba(2,8,24,0.45) 0%,transparent 60%);
-  pointer-events:none;
-  border-radius:50%;
-}
-/* glowing ring animation */
+.praveen-top .pframe::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(2,8,24,0.45) 0%,transparent 60%);pointer-events:none;border-radius:50%;}
 @keyframes ringPulse{0%,100%{box-shadow:0 0 60px rgba(37,99,235,0.4),0 0 120px rgba(37,99,235,0.15);}50%{box-shadow:0 0 90px rgba(96,165,250,0.55),0 0 160px rgba(37,99,235,0.25);}}
 .praveen-top .pframe{animation:ringPulse 3s ease-in-out infinite;}
 
@@ -49,8 +39,49 @@ body{background:#020b18;color:#e8f4ff;font-family:'Cormorant Garamond',Georgia,s
 .hero-title span{color:#60a5fa;}
 .hero-name{font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(26px,5vw,52px);color:#fbbf24;margin-top:8px;text-shadow:0 0 40px rgba(251,191,36,0.3);opacity:0;animation:fadeUp 1s 0.75s forwards;}
 .hero-sub{font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(18px,3vw,30px);color:#93c5fd;margin-top:6px;opacity:0;animation:fadeUp 1s 1s forwards;}
-.chips{margin-top:24px;display:flex;justify-content:center;gap:14px;flex-wrap:wrap;opacity:0;animation:fadeUp 1s 1.2s forwards;}
-.chip{background:rgba(56,130,240,0.1);border:0.5px solid rgba(96,165,250,0.38);border-radius:40px;padding:9px 24px;font-family:'Cormorant Garamond',serif;font-size:15px;color:#93c5fd;letter-spacing:1px;}
+
+/* ── ICON CHIPS: Calendar + Clock ── */
+.chips{margin-top:32px;display:flex;justify-content:center;gap:20px;flex-wrap:wrap;opacity:0;animation:fadeUp 1s 1.2s forwards;}
+
+.icon-chip{
+  display:flex;align-items:center;gap:14px;
+  background:rgba(10,28,72,0.55);
+  border:1px solid rgba(96,165,250,0.35);
+  border-radius:20px;
+  padding:14px 22px;
+  backdrop-filter:blur(8px);
+  box-shadow:0 0 30px rgba(37,99,235,0.12);
+  transition:border-color 0.3s,box-shadow 0.3s,transform 0.3s;
+}
+.icon-chip:hover{border-color:rgba(96,165,250,0.6);box-shadow:0 0 50px rgba(37,99,235,0.28);transform:translateY(-3px);}
+
+/* SVG calendar icon */
+.chip-icon{flex-shrink:0;width:48px;height:48px;position:relative;}
+
+/* Calendar SVG styles */
+.cal-svg,.clk-svg{width:48px;height:48px;}
+
+.chip-text{text-align:left;}
+.chip-label{font-family:'Cormorant Garamond',serif;font-size:11px;letter-spacing:2.5px;color:#60a5fa;text-transform:uppercase;opacity:0.8;display:block;margin-bottom:3px;}
+.chip-value{font-family:'Playfair Display',serif;font-size:18px;color:#e0f2fe;font-weight:700;letter-spacing:0.5px;display:block;}
+.chip-sub{font-family:'Cormorant Garamond',serif;font-size:13px;color:#7fb3e8;display:block;margin-top:1px;}
+
+/* Calendar SVG drawing */
+.cal-body{fill:rgba(37,99,235,0.18);stroke:rgba(96,165,250,0.7);stroke-width:1.5;rx:5;}
+.cal-header{fill:rgba(37,99,235,0.6);}
+.cal-pin{fill:#60a5fa;}
+.cal-date-text{fill:#fff;font-family:'Playfair Display',serif;font-size:13px;font-weight:700;text-anchor:middle;dominant-baseline:central;}
+.cal-month-text{fill:#bfdbfe;font-size:7px;text-anchor:middle;dominant-baseline:central;letter-spacing:1px;}
+
+/* Clock SVG drawing */
+.clk-circle{fill:rgba(37,99,235,0.18);stroke:rgba(96,165,250,0.7);stroke-width:1.5;}
+.clk-face{fill:rgba(10,28,72,0.5);}
+.clk-center{fill:#60a5fa;}
+.clk-hand{stroke:#60a5fa;stroke-linecap:round;}
+.clk-hand-min{stroke:#bfdbfe;stroke-linecap:round;}
+.clk-tick{stroke:rgba(96,165,250,0.4);stroke-linecap:round;}
+.clk-time-text{fill:#fff;font-family:'Playfair Display',serif;font-size:9px;font-weight:700;text-anchor:middle;dominant-baseline:central;}
+.clk-ampm{fill:#60a5fa;font-size:6px;text-anchor:middle;dominant-baseline:central;letter-spacing:1px;}
 
 /* DIVIDER */
 .divider{display:flex;align-items:center;gap:14px;margin:44px 0;}
@@ -82,7 +113,7 @@ body{background:#020b18;color:#e8f4ff;font-family:'Cormorant Garamond',Georgia,s
 .footer{text-align:center;opacity:0;animation:fadeUp 1s 2.1s forwards;margin-bottom:0;}
 .fw{font-family:'Playfair Display',serif;font-style:italic;font-size:24px;color:#93c5fd;margin-bottom:10px;}
 
-/* QUESTION SECTION */
+/* QUESTION */
 .question-section{margin-top:80px;opacity:0;animation:fadeUp 1s 2.5s forwards;}
 .q-card{background:rgba(10,28,72,0.6);border:1.5px solid rgba(96,165,250,0.4);border-radius:32px;padding:60px 44px 50px;text-align:center;position:relative;overflow:visible;}
 .q-card::before{content:'';position:absolute;inset:0;border-radius:32px;background:radial-gradient(ellipse at 50% 0%,rgba(37,99,235,0.15),transparent 70%);pointer-events:none;}
@@ -90,58 +121,18 @@ body{background:#020b18;color:#e8f4ff;font-family:'Cormorant Garamond',Georgia,s
 @keyframes heartbeat{0%,100%{transform:scale(1);}50%{transform:scale(1.18);}}
 .q-text{font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(26px,5vw,44px);color:#fff;line-height:1.2;margin-bottom:44px;}
 .q-text span{color:#60a5fa;}
-
-/* Button row */
 .q-buttons{display:flex;justify-content:center;align-items:center;gap:20px;flex-wrap:wrap;}
-.btn-yes{
-  background:linear-gradient(135deg,#1d4ed8,#2563eb);
-  border:none;border-radius:50px;
-  padding:18px 52px;
-  font-family:'Playfair Display',serif;font-size:20px;
-  color:#fff;cursor:pointer;
-  box-shadow:0 0 40px rgba(37,99,235,0.5);
-  transition:transform 0.2s,box-shadow 0.2s;
-  position:relative;z-index:2;
-}
+.btn-yes{background:linear-gradient(135deg,#1d4ed8,#2563eb);border:none;border-radius:50px;padding:18px 52px;font-family:'Playfair Display',serif;font-size:20px;color:#fff;cursor:pointer;box-shadow:0 0 40px rgba(37,99,235,0.5);transition:transform 0.2s,box-shadow 0.2s;position:relative;z-index:2;}
 .btn-yes:hover{transform:scale(1.07);box-shadow:0 0 60px rgba(37,99,235,0.8);}
 .btn-yes:active{transform:scale(0.97);}
-
-/* No button — dances beside Yes, pointer-events none = truly unclickable */
-.btn-no{
-  background:transparent;
-  border:0.5px solid rgba(255,255,255,0.25);
-  border-radius:50px;
-  padding:16px 36px;
-  font-family:'Cormorant Garamond',serif;font-size:17px;
-  color:rgba(255,255,255,0.32);
-  cursor:default;
-  user-select:none;
-  -webkit-user-select:none;
-  pointer-events:none;
-  display:inline-block;
-  animation:noDance 1.4s ease-in-out infinite;
-}
-@keyframes noDance{
-  0%   {transform:translateY(0) rotate(0deg);}
-  15%  {transform:translateY(-10px) rotate(-4deg);}
-  30%  {transform:translateY(0px) rotate(4deg);}
-  45%  {transform:translateY(-7px) rotate(-3deg);}
-  60%  {transform:translateY(0px) rotate(3deg);}
-  75%  {transform:translateY(-5px) rotate(-2deg);}
-  100% {transform:translateY(0) rotate(0deg);}
-}
-
+.btn-no{background:transparent;border:0.5px solid rgba(255,255,255,0.25);border-radius:50px;padding:16px 36px;font-family:'Cormorant Garamond',serif;font-size:17px;color:rgba(255,255,255,0.32);cursor:default;user-select:none;-webkit-user-select:none;pointer-events:none;display:inline-block;animation:noDance 1.4s ease-in-out infinite;}
+@keyframes noDance{0%{transform:translateY(0) rotate(0deg);}15%{transform:translateY(-10px) rotate(-4deg);}30%{transform:translateY(0px) rotate(4deg);}45%{transform:translateY(-7px) rotate(-3deg);}60%{transform:translateY(0px) rotate(3deg);}75%{transform:translateY(-5px) rotate(-2deg);}100%{transform:translateY(0) rotate(0deg);}}
 .q-hint{margin-top:28px;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:rgba(147,197,253,0.4);letter-spacing:1px;}
-
-/* SUCCESS state */
 .q-success{background:rgba(10,28,72,0.6);border:1.5px solid rgba(96,165,250,0.5);border-radius:32px;padding:60px 44px;text-align:center;}
 .success-hearts{font-size:52px;margin-bottom:20px;animation:heartbeat 1.2s ease-in-out infinite;}
 .success-title{font-family:'Playfair Display',serif;font-weight:700;font-size:56px;color:#60a5fa;margin-bottom:20px;}
-.success-tamil{font-family:'Noto Sans Tamil',sans-serif;font-size:19px;line-height:2;color:#bfdbfe;margin-bottom:24px;}
 .success-english{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:22px;line-height:1.9;color:#93c5fd;margin-bottom:32px;}
 .success-seal{display:inline-block;background:rgba(37,99,235,0.15);border:0.5px solid rgba(96,165,250,0.4);border-radius:40px;padding:10px 28px;font-family:'Cormorant Garamond',serif;font-size:15px;color:#7fb3e8;letter-spacing:3px;}
-
-/* confetti */
 .cfall{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;}
 .cp{position:absolute;width:8px;height:8px;border-radius:2px;opacity:0;}
 
@@ -151,6 +142,8 @@ body{background:#020b18;color:#e8f4ff;font-family:'Cormorant Garamond',Georgia,s
   .k-tamil{font-size:17px;}
   .q-card{padding:44px 24px 40px;}
   .praveen-top .pframe{width:140px;height:140px;}
+  .chips{flex-direction:column;align-items:center;}
+  .icon-chip{width:100%;max-width:280px;}
 }
 </style>
 </head>
@@ -164,7 +157,7 @@ body{background:#020b18;color:#e8f4ff;font-family:'Cormorant Garamond',Georgia,s
 
 <div class="page">
 
-  <!-- PRAVEEN PHOTO — top, before hero -->
+  <!-- PHOTO -->
   <div class="praveen-top">
     <div class="pframe">
       <img src="praveen.jpg" alt="Praveen">
@@ -177,11 +170,81 @@ body{background:#020b18;color:#e8f4ff;font-family:'Cormorant Garamond',Georgia,s
     <h1 class="hero-title">Happy <span>Birthday</span></h1>
     <p class="hero-name">Praveen 🌟</p>
     <p class="hero-sub">My Pasamalar &amp; Best Friend 💙</p>
+
+    <!-- ICON CHIPS -->
     <div class="chips">
-      <span class="chip">📅 April 3, 2001</span>
-      <span class="chip">⏰ 3:30 PM</span>
-    </div>
-  </div>
+
+      <!-- Calendar chip -->
+      <div class="icon-chip">
+        <div class="chip-icon">
+          <svg class="cal-svg" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- card body -->
+            <rect x="4" y="8" width="40" height="36" rx="5" class="cal-body"/>
+            <!-- header strip -->
+            <rect x="4" y="8" width="40" height="13" rx="5" class="cal-header"/>
+            <rect x="4" y="16" width="40" height="5" class="cal-header"/>
+            <!-- pin left -->
+            <rect x="13" y="4" width="3.5" height="9" rx="1.75" class="cal-pin"/>
+            <!-- pin right -->
+            <rect x="31.5" y="4" width="3.5" height="9" rx="1.75" class="cal-pin"/>
+            <!-- month label -->
+            <text x="24" y="14.5" class="cal-month-text">APRIL</text>
+            <!-- date number -->
+            <text x="24" y="31" class="cal-date-text">3</text>
+            <!-- year tiny -->
+            <text x="24" y="40" style="fill:#7fb3e8;font-size:6.5px;text-anchor:middle;dominant-baseline:central;letter-spacing:0.5px;font-family:sans-serif;">2 0 0 1</text>
+            <!-- dot decorations -->
+            <circle cx="13" cy="31" r="1.5" fill="rgba(96,165,250,0.35)"/>
+            <circle cx="35" cy="31" r="1.5" fill="rgba(96,165,250,0.35)"/>
+          </svg>
+        </div>
+        <div class="chip-text">
+          <span class="chip-label">Birthday</span>
+          <span class="chip-value">April 3, 2001</span>
+          <span class="chip-sub">Thursday · Spring</span>
+        </div>
+      </div>
+
+      <!-- Clock chip -->
+      <div class="icon-chip">
+        <div class="chip-icon">
+          <svg class="clk-svg" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- outer ring -->
+            <circle cx="24" cy="24" r="20" class="clk-circle"/>
+            <!-- inner face -->
+            <circle cx="24" cy="24" r="16.5" class="clk-face"/>
+            <!-- tick marks -->
+            <line x1="24" y1="9"  x2="24" y2="11.5" class="clk-tick" stroke-width="1.5"/>
+            <line x1="39" y1="24" x2="36.5" y2="24" class="clk-tick" stroke-width="1.5"/>
+            <line x1="24" y1="39" x2="24" y2="36.5" class="clk-tick" stroke-width="1.5"/>
+            <line x1="9"  y1="24" x2="11.5" y2="24" class="clk-tick" stroke-width="1.5"/>
+            <!-- smaller ticks -->
+            <line x1="33.2" y1="11.8" x2="31.5" y2="13.5" class="clk-tick" stroke-width="1"/>
+            <line x1="36.2" y1="33.2" x2="34.5" y2="31.5" class="clk-tick" stroke-width="1"/>
+            <line x1="14.8" y1="36.2" x2="16.5" y2="34.5" class="clk-tick" stroke-width="1"/>
+            <line x1="11.8" y1="14.8" x2="13.5" y2="16.5" class="clk-tick" stroke-width="1"/>
+            <!-- 3:30 — hour hand points between 3 and 4 (at ~105°), minute hand at 6 (180°) -->
+            <!-- Hour hand at 3:30 → 3.5 × 30 = 105°, measured from 12 → x2=24+sin(105°)×10, y2=24-cos(105°)×10 -->
+            <!-- sin(105°)=0.966, cos(105°)=-0.259 → x2=33.66, y2=26.59 -->
+            <line x1="24" y1="24" x2="33.7" y2="26.6" class="clk-hand" stroke-width="2.2"/>
+            <!-- Minute hand at :30 → 180° → points straight down: x2=24, y2=24+13=37 -->
+            <line x1="24" y1="24" x2="24" y2="37" class="clk-hand-min" stroke-width="1.5"/>
+            <!-- center dot -->
+            <circle cx="24" cy="24" r="2.2" class="clk-center"/>
+            <!-- time label -->
+            <text x="24" y="18" class="clk-time-text">3:30</text>
+            <text x="24" y="22" class="clk-ampm">PM</text>
+          </svg>
+        </div>
+        <div class="chip-text">
+          <span class="chip-label">Born at</span>
+          <span class="chip-value">3:30 PM</span>
+          <span class="chip-sub">The world got brighter ✨</span>
+        </div>
+      </div>
+
+    </div><!-- /chips -->
+  </div><!-- /hero -->
 
   <div class="divider"><div class="dl"></div><span class="ds">✦</span><span class="ds">✦</span><span class="ds">✦</span><div class="dl"></div></div>
 
@@ -190,11 +253,10 @@ body{background:#020b18;color:#e8f4ff;font-family:'Cormorant Garamond',Georgia,s
     <div class="k-tamil">
       ஏப்ரல் மூன்றில் பிறந்தவனே,<br>
       என் பாசமலரே தம்பியே,<br>
-      
       தம்பி மட்டுமல்ல, நண்பனும் நீ,<br>
       நட்சத்திரம் போல் என்றும் மின்னுவாய்,<br>
       பிறந்தநாளில் உன் கனவுகள் மலரட்டும் —<br>
-      நம் சொந்தம் என்றென்றும் அழியாதிருக்கட்டும்.    
+      நம் சொந்தம் என்றென்றும் அழியாதிருக்கட்டும்.
     </div>
   </div>
 
@@ -211,26 +273,10 @@ body{background:#020b18;color:#e8f4ff;font-family:'Cormorant Garamond',Georgia,s
 
   <!-- WISHES -->
   <div class="wishes">
-    <div class="wish">
-      <span class="wi">🌟</span>
-      <div class="wt">My strength, always</div>
-      <p class="wb">In every storm you were right there. In every joy you made it double. Happy birthday, Praveen!</p>
-    </div>
-    <div class="wish">
-      <span class="wi">💙</span>
-      <div class="wt">Best friend forever</div>
-      <p class="wb">Not just my thambi — you are my secret keeper, my laugh partner, my whole heart's shelter.</p>
-    </div>
-    <div class="wish">
-      <span class="wi">🚀</span>
-      <div class="wt">Fly high, no limits</div>
-      <p class="wb">May this new year bring every goal achieved, every dream fulfilled and every sky conquered.</p>
-    </div>
-    <div class="wish">
-      <span class="wi">🌙</span>
-      <div class="wt">Born under stars</div>
-      <p class="wb">At 3:30 PM on April 3rd the stars gathered. That magic lives in you — you light up every room.</p>
-    </div>
+    <div class="wish"><span class="wi">🌟</span><div class="wt">My strength, always</div><p class="wb">In every storm you were right there. In every joy you made it double. Happy birthday, Praveen!</p></div>
+    <div class="wish"><span class="wi">💙</span><div class="wt">Best friend forever</div><p class="wb">Not just my thambi — you are my secret keeper, my laugh partner, my whole heart's shelter.</p></div>
+    <div class="wish"><span class="wi">🚀</span><div class="wt">Fly high, no limits</div><p class="wb">May this new year bring every goal achieved, every dream fulfilled and every sky conquered.</p></div>
+    <div class="wish"><span class="wi">🌙</span><div class="wt">Born under stars</div><p class="wb">At 3:30 PM on April 3rd the stars gathered. That magic lives in you — you light up every room.</p></div>
   </div>
 
   <div class="divider"><div class="dl"></div><span class="ds">✦</span><div class="dl"></div></div>
@@ -240,9 +286,8 @@ body{background:#020b18;color:#e8f4ff;font-family:'Cormorant Garamond',Georgia,s
     <p class="fw">With all my love, always and forever 💙</p>
   </div>
 
-  <!-- THE QUESTION -->
+  <!-- QUESTION -->
   <div class="question-section">
-
     <div class="q-card" id="qcard">
       <span class="q-hearts">💙</span>
       <h2 class="q-text">Will you be my lifelong<br><span>Brother &amp; Best Friend?</span></h2>
@@ -252,18 +297,11 @@ body{background:#020b18;color:#e8f4ff;font-family:'Cormorant Garamond',Georgia,s
       </div>
       <p class="q-hint" id="qhint">* Try clicking No... if you can 😏</p>
     </div>
-
     <div class="q-success" id="qsuccess" style="display:none;">
       <div class="success-hearts">💙🌟💙</div>
-
-      <p class="success-english">
-        You said YES! 💙<br>
-        Now it's official —<br>
-        Brother &amp; Best Friend, for life, forever &amp; always!
-      </p>
+      <p class="success-english">You said YES! 💙<br>Now it's official —<br>Brother &amp; Best Friend, for life, forever &amp; always!</p>
       <div class="success-seal">✦ Sealed with love ✦</div>
     </div>
-
   </div>
 
 </div>
@@ -271,75 +309,35 @@ body{background:#020b18;color:#e8f4ff;font-family:'Cormorant Garamond',Georgia,s
 <script>
 /* STARFIELD */
 (function(){
-  const c=document.getElementById('starfield');
-  const ctx=c.getContext('2d');
-  let W,H,stars=[];
+  const c=document.getElementById('starfield');const ctx=c.getContext('2d');let W,H,stars=[];
   function resize(){W=c.width=innerWidth;H=c.height=innerHeight;}
-  function init(){
-    stars=[];
-    for(let i=0;i<240;i++) stars.push({
-      x:Math.random()*W,y:Math.random()*H,
-      r:Math.random()*1.6+0.2,a:Math.random()*0.65+0.2,
-      sp:Math.random()*0.35+0.04,tw:Math.random()*Math.PI*2
-    });
-  }
-  function draw(){
-    ctx.clearRect(0,0,W,H);
-    stars.forEach(s=>{
-      s.tw+=0.011;
-      const al=s.a*(0.55+0.45*Math.sin(s.tw));
-      ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
-      ctx.fillStyle=`rgba(175,210,255,${al})`;ctx.fill();
-      s.y+=s.sp*0.07;
-      if(s.y>H){s.y=0;s.x=Math.random()*W;}
-    });
-    requestAnimationFrame(draw);
-  }
-  resize();init();draw();
-  window.addEventListener('resize',()=>{resize();init();});
+  function init(){stars=[];for(let i=0;i<240;i++)stars.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.6+0.2,a:Math.random()*0.65+0.2,sp:Math.random()*0.35+0.04,tw:Math.random()*Math.PI*2});}
+  function draw(){ctx.clearRect(0,0,W,H);stars.forEach(s=>{s.tw+=0.011;const al=s.a*(0.55+0.45*Math.sin(s.tw));ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle=`rgba(175,210,255,${al})`;ctx.fill();s.y+=s.sp*0.07;if(s.y>H){s.y=0;s.x=Math.random()*W;}});requestAnimationFrame(draw);}
+  resize();init();draw();window.addEventListener('resize',()=>{resize();init();});
 })();
 
-/* COUNTDOWN */
+/* COUNTDOWN — age since April 3, 2001 15:30 */
 (function(){
-  const birth=new Date(2001,3,3,15,30,0);
-  const now=new Date();
-  let y=now.getFullYear()-birth.getFullYear();
-  let mo=now.getMonth()-birth.getMonth();
-  let d=now.getDate()-birth.getDate();
-  if(d<0){mo--;d+=30;}
-  if(mo<0){y--;mo+=12;}
+  const birth=new Date(2001,3,3,15,30,0);const now=new Date();
+  let y=now.getFullYear()-birth.getFullYear();let mo=now.getMonth()-birth.getMonth();let d=now.getDate()-birth.getDate();
+  if(d<0){mo--;d+=30;}if(mo<0){y--;mo+=12;}
   const h=Math.floor((now-birth)/(1000*3600))%24;
-  document.getElementById('cy').textContent=y;
-  document.getElementById('cm').textContent=mo;
-  document.getElementById('cd').textContent=d;
-  document.getElementById('ch').textContent=h;
+  document.getElementById('cy').textContent=y;document.getElementById('cm').textContent=mo;document.getElementById('cd').textContent=d;document.getElementById('ch').textContent=h;
 })();
 
 /* CONFETTI */
 function launchConfetti(){
-  const cont=document.getElementById('confetti');
-  const cols=['#60a5fa','#93c5fd','#fbbf24','#2dd4bf','#fff','#dbeafe','#f9a8d4'];
-  const s=document.createElement('style');
-  s.textContent='@keyframes fall{0%{opacity:1;transform:translateY(0) rotate(0deg);}100%{opacity:0;transform:translateY(100vh) rotate(720deg);}}';
-  document.head.appendChild(s);
-  for(let i=0;i<100;i++){
-    const el=document.createElement('div');
-    el.className='cp';
-    el.style.cssText=`left:${Math.random()*100}%;top:-10px;width:${6+Math.random()*8}px;height:${6+Math.random()*8}px;background:${cols[Math.floor(Math.random()*cols.length)]};transform:rotate(${Math.random()*360}deg);animation:fall ${2+Math.random()*3}s ${Math.random()*2}s ease-in forwards;`;
-    cont.appendChild(el);
-  }
+  const cont=document.getElementById('confetti');const cols=['#60a5fa','#93c5fd','#fbbf24','#2dd4bf','#fff','#dbeafe','#f9a8d4'];
+  const s=document.createElement('style');s.textContent='@keyframes fall{0%{opacity:1;transform:translateY(0) rotate(0deg);}100%{opacity:0;transform:translateY(100vh) rotate(720deg);}}';document.head.appendChild(s);
+  for(let i=0;i<100;i++){const el=document.createElement('div');el.className='cp';el.style.cssText=`left:${Math.random()*100}%;top:-10px;width:${6+Math.random()*8}px;height:${6+Math.random()*8}px;background:${cols[Math.floor(Math.random()*cols.length)]};transform:rotate(${Math.random()*360}deg);animation:fall ${2+Math.random()*3}s ${Math.random()*2}s ease-in forwards;`;cont.appendChild(el);}
 }
 launchConfetti();
 
-/* YES handler */
+/* YES */
 function sayYes(){
-  document.getElementById('qcard').style.display = 'none';
-  const success = document.getElementById('qsuccess');
-  success.style.display = 'block';
-  success.style.opacity = '0';
-  success.style.animation = 'fadeUp 0.8s forwards';
-  launchConfetti();
-  setTimeout(launchConfetti, 1200);
+  document.getElementById('qcard').style.display='none';
+  const s=document.getElementById('qsuccess');s.style.display='block';s.style.opacity='0';s.style.animation='fadeUp 0.8s forwards';
+  launchConfetti();setTimeout(launchConfetti,1200);
 }
 </script>
 </body>
