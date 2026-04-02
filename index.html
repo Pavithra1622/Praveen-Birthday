@@ -298,74 +298,25 @@ body{background:#020b18;color:#e8f4ff;font-family:'Cormorant Garamond',Georgia,s
 })();
 
 /* COUNTDOWN — age since April 3, 2001 15:30 */
-(function () {
-  const birth = new Date(2001, 3, 3, 15, 30, 0); // April 3, 3:30 PM
-  const now = new Date();
+const birth = new Date(2001, 3, 3, 15, 30, 0);
+const now = new Date();
 
-  // Step 1: Calculate years correctly
-  let years = now.getFullYear() - birth.getFullYear();
+// Create this year's birthday
+const thisYearBirthday = new Date(
+  now.getFullYear(),
+  birth.getMonth(),
+  birth.getDate(),
+  birth.getHours(),
+  birth.getMinutes(),
+  birth.getSeconds()
+);
 
-  const thisYearBirthday = new Date(
-    now.getFullYear(),
-    birth.getMonth(),
-    birth.getDate(),
-    birth.getHours(),
-    birth.getMinutes(),
-    birth.getSeconds()
-  );
+// ✅ Correct age
+let years = now.getFullYear() - birth.getFullYear();
 
-  if (now < thisYearBirthday) {
-    years--;
-  }
-
-  // Step 2: Create anchor date (last birthday)
-  let anchor = new Date(
-    birth.getFullYear() + years,
-    birth.getMonth(),
-    birth.getDate(),
-    birth.getHours(),
-    birth.getMinutes(),
-    birth.getSeconds()
-  );
-
-  // Step 3: Calculate months
-  let months = 0;
-  while (true) {
-    let next = new Date(anchor);
-    next.setMonth(next.getMonth() + 1);
-
-    if (next <= now) {
-      anchor = next;
-      months++;
-    } else {
-      break;
-    }
-  }
-
-  // Step 4: Calculate days
-  let days = 0;
-  while (true) {
-    let next = new Date(anchor);
-    next.setDate(next.getDate() + 1);
-
-    if (next <= now) {
-      anchor = next;
-      days++;
-    } else {
-      break;
-    }
-  }
-
-  // Step 5: Remaining hours
-  const hours = Math.floor((now - anchor) / (1000 * 60 * 60));
-
-  // Output
-  document.getElementById("cy").textContent = years;
-  document.getElementById("cm").textContent = months;
-  document.getElementById("cd").textContent = days;
-  document.getElementById("ch").textContent = hours;
-})();
-
+if (now < thisYearBirthday) {
+  years = years - 1; // 👈 THIS fixes your issue
+}
 /* CONFETTI */
 function launchConfetti(){
   const cont=document.getElementById('confetti');const cols=['#60a5fa','#93c5fd','#fbbf24','#2dd4bf','#fff','#dbeafe','#f9a8d4'];
