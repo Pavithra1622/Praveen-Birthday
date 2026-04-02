@@ -297,30 +297,25 @@ body{background:#020b18;color:#e8f4ff;font-family:'Cormorant Garamond',Georgia,s
   resize();init();draw();window.addEventListener('resize',()=>{resize();init();});
 })();
 (function () {
-  const birth = new Date(2001, 3, 3, 15, 30, 0); // April 3, 3:30 PM (LOCAL TIME)
+  const birth = new Date(2001, 3, 3, 15, 30, 0); // April 3, 3:30 PM
   const now = new Date();
 
-  // ✅ STEP 1: Find last birthday correctly
-  let lastBirthday = new Date(
-    now.getFullYear(),
-    birth.getMonth(),
-    birth.getDate(),
-    birth.getHours(),
-    birth.getMinutes(),
-    birth.getSeconds()
-  );
+  let temp = new Date(birth);
 
-  if (now < lastBirthday) {
-    lastBirthday.setFullYear(lastBirthday.getFullYear() - 1);
+  let years = 0, months = 0, days = 0;
+
+  // ✅ YEARS
+  while (true) {
+    let next = new Date(temp);
+    next.setFullYear(next.getFullYear() + 1);
+
+    if (next <= now) {
+      temp = next;
+      years++;
+    } else break;
   }
 
-  // ✅ STEP 2: YEARS (this is the correct age)
-  const years = lastBirthday.getFullYear() - birth.getFullYear();
-
-  // ✅ STEP 3: MONTHS
-  let temp = new Date(lastBirthday);
-  let months = 0;
-
+  // ✅ MONTHS
   while (true) {
     let next = new Date(temp);
     next.setMonth(next.getMonth() + 1);
@@ -331,9 +326,7 @@ body{background:#020b18;color:#e8f4ff;font-family:'Cormorant Garamond',Georgia,s
     } else break;
   }
 
-  // ✅ STEP 4: DAYS
-  let days = 0;
-
+  // ✅ DAYS
   while (true) {
     let next = new Date(temp);
     next.setDate(next.getDate() + 1);
@@ -344,7 +337,7 @@ body{background:#020b18;color:#e8f4ff;font-family:'Cormorant Garamond',Georgia,s
     } else break;
   }
 
-  // ✅ STEP 5: HOURS (accurate)
+  // ✅ HOURS (final remaining)
   const hours = Math.floor((now - temp) / (1000 * 60 * 60));
 
   // ✅ OUTPUT
