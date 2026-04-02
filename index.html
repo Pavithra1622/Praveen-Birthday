@@ -300,7 +300,23 @@ body{background:#020b18;color:#e8f4ff;font-family:'Cormorant Garamond',Georgia,s
   const birth = new Date("2001-04-03T15:30:00");
   const now = new Date();
 
+  // ✅ YEAR (exact birthday time check)
   let years = now.getFullYear() - birth.getFullYear();
+
+  const thisYearBirthday = new Date(
+    now.getFullYear(),
+    birth.getMonth(),
+    birth.getDate(),
+    birth.getHours(),
+    birth.getMinutes(),
+    birth.getSeconds()
+  );
+
+  if (now < thisYearBirthday) {
+    years--;
+  }
+
+  // ✅ MONTH, DAY, HOUR (full difference from birth)
   let months = now.getMonth() - birth.getMonth();
   let days = now.getDate() - birth.getDate();
   let hours = now.getHours() - birth.getHours();
@@ -311,20 +327,29 @@ body{background:#020b18;color:#e8f4ff;font-family:'Cormorant Garamond',Georgia,s
     days--;
   }
 
-  // Fix days
+  // Fix days (use actual previous month days)
   if (days < 0) {
-    const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
-    days += prevMonth.getDate();
+    const prevMonthDays = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      0
+    ).getDate();
+
+    days += prevMonthDays;
     months--;
   }
 
   // Fix months
   if (months < 0) {
     months += 12;
-    years--;
   }
 
-  // Final output
+  // ⚠️ Important: if birthday not reached, adjust months also
+  if (now < thisYearBirthday) {
+    months = (months + 11) % 12;
+  }
+
+  // ✅ Output
   document.getElementById("cy").textContent = years;
   document.getElementById("cm").textContent = months;
   document.getElementById("cd").textContent = days;
