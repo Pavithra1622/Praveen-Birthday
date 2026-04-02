@@ -296,27 +296,38 @@ body{background:#020b18;color:#e8f4ff;font-family:'Cormorant Garamond',Georgia,s
   function draw(){ctx.clearRect(0,0,W,H);stars.forEach(s=>{s.tw+=0.011;const al=s.a*(0.55+0.45*Math.sin(s.tw));ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle=`rgba(175,210,255,${al})`;ctx.fill();s.y+=s.sp*0.07;if(s.y>H){s.y=0;s.x=Math.random()*W;}});requestAnimationFrame(draw);}
   resize();init();draw();window.addEventListener('resize',()=>{resize();init();});
 })();
+(function () {
+  // Convert everything to IST explicitly
+  const now = new Date();
 
-/* COUNTDOWN — age since April 3, 2001 15:30 */
-const birth = new Date(2001, 3, 3, 15, 30, 0);
-const now = new Date();
+  // IST offset in ms
+  const IST_OFFSET = 5.5 * 60 * 60 * 1000;
 
-// Create this year's birthday
-const thisYearBirthday = new Date(
-  now.getFullYear(),
-  birth.getMonth(),
-  birth.getDate(),
-  birth.getHours(),
-  birth.getMinutes(),
-  birth.getSeconds()
-);
+  // Convert current time to IST
+  const nowIST = new Date(now.getTime() + (IST_OFFSET - now.getTimezoneOffset() * 60000));
 
-// ✅ Correct age
-let years = now.getFullYear() - birth.getFullYear();
+  // Birth time in IST
+  const birthIST = new Date(Date.UTC(2001, 3, 3, 10, 0, 0)); 
+  // 3:30 PM IST = 10:00 AM UTC
 
-if (now < thisYearBirthday) {
-  years = years - 1; // 👈 THIS fixes your issue
-}
+  // This year's birthday in IST
+  const thisYearBirthdayIST = new Date(Date.UTC(
+    nowIST.getFullYear(),
+    3, // April
+    3,
+    10, // 10:00 UTC = 3:30 PM IST
+    0,
+    0
+  ));
+
+  let years = nowIST.getFullYear() - 2001;
+
+  if (nowIST < thisYearBirthdayIST) {
+    years--;
+  }
+
+  document.getElementById("cy").textContent = years;
+})();
 /* CONFETTI */
 function launchConfetti(){
   const cont=document.getElementById('confetti');const cols=['#60a5fa','#93c5fd','#fbbf24','#2dd4bf','#fff','#dbeafe','#f9a8d4'];
