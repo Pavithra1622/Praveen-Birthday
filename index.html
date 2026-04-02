@@ -283,27 +283,8 @@ body{background:#020b18;color:#e8f4ff;font-family:'Cormorant Garamond',Georgia,s
 
   <!-- FOOTER -->
   <div class="footer">
-    <p class="fw">With all my love, always and forever 💙</p>
+    <p class="fw">With all my love and support, always and forever 💙</p>
   </div>
-
-  <!-- QUESTION -->
-  <div class="question-section">
-    <div class="q-card" id="qcard">
-      <span class="q-hearts">💙</span>
-      <h2 class="q-text">Will you be my lifelong<br><span>Brother &amp; Best Friend?</span></h2>
-      <div class="q-buttons">
-        <button class="btn-yes" id="btnYes" onclick="sayYes()">💙 Yes, Always!</button>
-        <button class="btn-no" id="btnNo">No 🙅</button>
-      </div>
-      <p class="q-hint" id="qhint">* Try clicking No... if you can 😏</p>
-    </div>
-    <div class="q-success" id="qsuccess" style="display:none;">
-      <div class="success-hearts">💙🌟💙</div>
-      <p class="success-english">You said YES! 💙<br>Now it's official —<br>Brother &amp; Best Friend, for life, forever &amp; always!</p>
-      <div class="success-seal">✦ Sealed with love ✦</div>
-    </div>
-  </div>
-
 </div>
 
 <script>
@@ -332,13 +313,6 @@ function launchConfetti(){
   for(let i=0;i<100;i++){const el=document.createElement('div');el.className='cp';el.style.cssText=`left:${Math.random()*100}%;top:-10px;width:${6+Math.random()*8}px;height:${6+Math.random()*8}px;background:${cols[Math.floor(Math.random()*cols.length)]};transform:rotate(${Math.random()*360}deg);animation:fall ${2+Math.random()*3}s ${Math.random()*2}s ease-in forwards;`;cont.appendChild(el);}
 }
 launchConfetti();
-
-/* YES */
-function sayYes(){
-  document.getElementById('qcard').style.display='none';
-  const s=document.getElementById('qsuccess');s.style.display='block';s.style.opacity='0';s.style.animation='fadeUp 0.8s forwards';
-  launchConfetti();setTimeout(launchConfetti,1200);
-}
 </script>
 </body>
 </html>
