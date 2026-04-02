@@ -297,38 +297,75 @@ body{background:#020b18;color:#e8f4ff;font-family:'Cormorant Garamond',Georgia,s
   resize();init();draw();window.addEventListener('resize',()=>{resize();init();});
 })();
 (function () {
-  // Convert everything to IST explicitly
+  const birth = new Date("2001-04-03T15:30:00"); // IST (safe format)
   const now = new Date();
 
-  // IST offset in ms
-  const IST_OFFSET = 5.5 * 60 * 60 * 1000;
+  // ✅ Step 1: Calculate years correctly
+  let years = now.getFullYear() - birth.getFullYear();
 
-  // Convert current time to IST
-  const nowIST = new Date(now.getTime() + (IST_OFFSET - now.getTimezoneOffset() * 60000));
+  const thisYearBirthday = new Date(
+    now.getFullYear(),
+    birth.getMonth(),
+    birth.getDate(),
+    birth.getHours(),
+    birth.getMinutes(),
+    birth.getSeconds()
+  );
 
-  // Birth time in IST
-  const birthIST = new Date(Date.UTC(2001, 3, 3, 10, 0, 0)); 
-  // 3:30 PM IST = 10:00 AM UTC
-
-  // This year's birthday in IST
-  const thisYearBirthdayIST = new Date(Date.UTC(
-    nowIST.getFullYear(),
-    3, // April
-    3,
-    10, // 10:00 UTC = 3:30 PM IST
-    0,
-    0
-  ));
-
-  let years = nowIST.getFullYear() - 2001;
-
-  if (nowIST < thisYearBirthdayIST) {
+  if (now < thisYearBirthday) {
     years--;
   }
 
+  // ✅ Step 2: Create last birthday (anchor)
+  let lastBirthday = new Date(
+    now.getFullYear(),
+    birth.getMonth(),
+    birth.getDate(),
+    birth.getHours(),
+    birth.getMinutes(),
+    birth.getSeconds()
+  );
+
+  if (now < lastBirthday) {
+    lastBirthday.setFullYear(lastBirthday.getFullYear() - 1);
+  }
+
+  // ✅ Step 3: Calculate months
+  let temp = new Date(lastBirthday);
+  let months = 0;
+
+  while (true) {
+    let next = new Date(temp);
+    next.setMonth(next.getMonth() + 1);
+
+    if (next <= now) {
+      temp = next;
+      months++;
+    } else break;
+  }
+
+  // ✅ Step 4: Calculate days
+  let days = 0;
+
+  while (true) {
+    let next = new Date(temp);
+    next.setDate(next.getDate() + 1);
+
+    if (next <= now) {
+      temp = next;
+      days++;
+    } else break;
+  }
+
+  // ✅ Step 5: Hours
+  const hours = Math.floor((now - temp) / (1000 * 60 * 60));
+
+  // ✅ Output
   document.getElementById("cy").textContent = years;
-})();
-/* CONFETTI */
+  document.getElementById("cm").textContent = months;
+  document.getElementById("cd").textContent = days;
+  document.getElementById("ch").textContent = hours;
+})();/* CONFETTI */
 function launchConfetti(){
   const cont=document.getElementById('confetti');const cols=['#60a5fa','#93c5fd','#fbbf24','#2dd4bf','#fff','#dbeafe','#f9a8d4'];
   const s=document.createElement('style');s.textContent='@keyframes fall{0%{opacity:1;transform:translateY(0) rotate(0deg);}100%{opacity:0;transform:translateY(100vh) rotate(720deg);}}';document.head.appendChild(s);
