@@ -303,24 +303,38 @@ body{background:#020b18;color:#e8f4ff;font-family:'Cormorant Garamond',Georgia,s
   const now = new Date();
 
   let years = now.getFullYear() - birth.getFullYear();
-  let months = now.getMonth() - birth.getMonth();
-  let days = now.getDate() - birth.getDate();
 
-  // Fix days
-  if (days < 0) {
-    months--;
-    const prevMonthDays = new Date(now.getFullYear(), now.getMonth(), 0).getDate();
-    days += prevMonthDays;
+  // Check if birthday happened this year
+  const thisYearBirthday = new Date(
+    now.getFullYear(),
+    birth.getMonth(),
+    birth.getDate(),
+    birth.getHours(),
+    birth.getMinutes(),
+    birth.getSeconds()
+  );
+
+  if (now < thisYearBirthday) {
+    years--; // ❗ reduce 1 year
   }
 
-  // Fix months
-  if (months < 0) {
-    years--;
-    months += 12;
-  }
+  // Remaining difference
+  let diff = now - new Date(
+    now.getFullYear() - years,
+    birth.getMonth(),
+    birth.getDate(),
+    birth.getHours(),
+    birth.getMinutes(),
+    birth.getSeconds()
+  );
 
-  // Hours
-  const hours = Math.floor((now - birth) / (1000 * 60 * 60)) % 24;
+  const months = Math.floor(diff / (1000 * 60 * 60 * 24 * 30));
+  diff %= (1000 * 60 * 60 * 24 * 30);
+
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  diff %= (1000 * 60 * 60 * 24);
+
+  const hours = Math.floor(diff / (1000 * 60 * 60));
 
   document.getElementById('cy').textContent = years;
   document.getElementById('cm').textContent = months;
