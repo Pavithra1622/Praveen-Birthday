@@ -297,13 +297,11 @@ body{background:#020b18;color:#e8f4ff;font-family:'Cormorant Garamond',Georgia,s
   resize();init();draw();window.addEventListener('resize',()=>{resize();init();});
 })();
 (function () {
-  const birth = new Date(2001, 3, 3, 15, 30, 0);  
+  const birth = new Date(2001, 3, 3, 15, 30, 0); // April 3, 3:30 PM (LOCAL TIME)
   const now = new Date();
 
-  // ✅ YEAR (exact birthday time check)
-  let years = now.getFullYear() - birth.getFullYear();
-
-  const thisYearBirthday = new Date(
+  // ✅ STEP 1: Find last birthday correctly
+  let lastBirthday = new Date(
     now.getFullYear(),
     birth.getMonth(),
     birth.getDate(),
@@ -312,44 +310,44 @@ body{background:#020b18;color:#e8f4ff;font-family:'Cormorant Garamond',Georgia,s
     birth.getSeconds()
   );
 
-  if (now < thisYearBirthday) {
-    years--;
+  if (now < lastBirthday) {
+    lastBirthday.setFullYear(lastBirthday.getFullYear() - 1);
   }
 
-  // ✅ MONTH, DAY, HOUR (full difference from birth)
-  let months = now.getMonth() - birth.getMonth();
-  let days = now.getDate() - birth.getDate();
-  let hours = now.getHours() - birth.getHours();
+  // ✅ STEP 2: YEARS (this is the correct age)
+  const years = lastBirthday.getFullYear() - birth.getFullYear();
 
-  // Fix hours
-  if (hours < 0) {
-    hours += 24;
-    days--;
+  // ✅ STEP 3: MONTHS
+  let temp = new Date(lastBirthday);
+  let months = 0;
+
+  while (true) {
+    let next = new Date(temp);
+    next.setMonth(next.getMonth() + 1);
+
+    if (next <= now) {
+      temp = next;
+      months++;
+    } else break;
   }
 
-  // Fix days (use actual previous month days)
-  if (days < 0) {
-    const prevMonthDays = new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      0
-    ).getDate();
+  // ✅ STEP 4: DAYS
+  let days = 0;
 
-    days += prevMonthDays;
-    months--;
+  while (true) {
+    let next = new Date(temp);
+    next.setDate(next.getDate() + 1);
+
+    if (next <= now) {
+      temp = next;
+      days++;
+    } else break;
   }
 
-  // Fix months
-  if (months < 0) {
-    months += 12;
-  }
+  // ✅ STEP 5: HOURS (accurate)
+  const hours = Math.floor((now - temp) / (1000 * 60 * 60));
 
-  // ⚠️ Important: if birthday not reached, adjust months also
-  if (now < thisYearBirthday) {
-    months = (months + 11) % 12;
-  }
-
-  // ✅ Output
+  // ✅ OUTPUT
   document.getElementById("cy").textContent = years;
   document.getElementById("cm").textContent = months;
   document.getElementById("cd").textContent = days;
