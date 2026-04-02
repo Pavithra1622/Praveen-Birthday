@@ -299,11 +299,33 @@ body{background:#020b18;color:#e8f4ff;font-family:'Cormorant Garamond',Georgia,s
 
 /* COUNTDOWN — age since April 3, 2001 15:30 */
 (function(){
-  const birth=new Date(2001,3,3,15,30,0);const now=new Date();
-  let y=now.getFullYear()-birth.getFullYear();let mo=now.getMonth()-birth.getMonth();let d=now.getDate()-birth.getDate();
-  if(d<0){mo--;d+=30;}if(mo<0){y--;mo+=12;}
-  const h=Math.floor((now-birth)/(1000*3600))%24;
-  document.getElementById('cy').textContent=y;document.getElementById('cm').textContent=mo;document.getElementById('cd').textContent=d;document.getElementById('ch').textContent=h;
+  const birth = new Date(2001, 3, 3, 15, 30, 0);
+  const now = new Date();
+
+  let years = now.getFullYear() - birth.getFullYear();
+  let months = now.getMonth() - birth.getMonth();
+  let days = now.getDate() - birth.getDate();
+
+  // Fix days
+  if (days < 0) {
+    months--;
+    const prevMonthDays = new Date(now.getFullYear(), now.getMonth(), 0).getDate();
+    days += prevMonthDays;
+  }
+
+  // Fix months
+  if (months < 0) {
+    years--;
+    months += 12;
+  }
+
+  // Hours
+  const hours = Math.floor((now - birth) / (1000 * 60 * 60)) % 24;
+
+  document.getElementById('cy').textContent = years;
+  document.getElementById('cm').textContent = months;
+  document.getElementById('cd').textContent = days;
+  document.getElementById('ch').textContent = hours;
 })();
 
 /* CONFETTI */
