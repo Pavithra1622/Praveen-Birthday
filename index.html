@@ -298,13 +298,39 @@ body{background:#020b18;color:#e8f4ff;font-family:'Cormorant Garamond',Georgia,s
 })();
 
 /* COUNTDOWN — age since April 3, 2001 15:30 */
-(function(){
-  const birth = new Date(2001, 3, 3, 15, 30, 0);
+(function () {
+  const birth = new Date(2001, 3, 3, 15, 30, 0); // April 3
   const now = new Date();
 
   let years = now.getFullYear() - birth.getFullYear();
+  let months = now.getMonth() - birth.getMonth();
+  let days = now.getDate() - birth.getDate();
+  let hours = now.getHours() - birth.getHours();
 
-  // Check if birthday happened this year
+  // Fix hours
+  if (hours < 0) {
+    days--;
+    hours += 24;
+  }
+
+  // Fix days
+  if (days < 0) {
+    months--;
+    const prevMonthDays = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      0
+    ).getDate(); // actual days in previous month
+    days += prevMonthDays;
+  }
+
+  // Fix months
+  if (months < 0) {
+    years--;
+    months += 12;
+  }
+
+  // ❗ Important: Check birthday not reached yet
   const thisYearBirthday = new Date(
     now.getFullYear(),
     birth.getMonth(),
@@ -315,31 +341,13 @@ body{background:#020b18;color:#e8f4ff;font-family:'Cormorant Garamond',Georgia,s
   );
 
   if (now < thisYearBirthday) {
-    years--; // ❗ reduce 1 year
+    years--;
   }
 
-  // Remaining difference
-  let diff = now - new Date(
-    now.getFullYear() - years,
-    birth.getMonth(),
-    birth.getDate(),
-    birth.getHours(),
-    birth.getMinutes(),
-    birth.getSeconds()
-  );
-
-  const months = Math.floor(diff / (1000 * 60 * 60 * 24 * 30));
-  diff %= (1000 * 60 * 60 * 24 * 30);
-
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-  diff %= (1000 * 60 * 60 * 24);
-
-  const hours = Math.floor(diff / (1000 * 60 * 60));
-
-  document.getElementById('cy').textContent = years;
-  document.getElementById('cm').textContent = months;
-  document.getElementById('cd').textContent = days;
-  document.getElementById('ch').textContent = hours;
+  document.getElementById("cy").textContent = years;
+  document.getElementById("cm").textContent = months;
+  document.getElementById("cd").textContent = days;
+  document.getElementById("ch").textContent = hours;
 })();
 
 /* CONFETTI */
